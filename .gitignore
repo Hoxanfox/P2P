@@ -1,0 +1,48 @@
+# Maven
+target/
+*.log
+*.class
+
+# Gradle
+.gradle/
+build/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# VS Code
+.vscode/
+
+# JavaFX
+*.jar
+*.javadoc
+*.class
+*.log
+
+# Eclipse
+.metadata/
+*.tmp
+*.bak
+*.swp
+
+# NetBeans
+nbproject/private/
+build/
+nbbuild/
+dist/
+.nb-gradle/
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.javadoc
+*.log
+
+# Operating System files
+.DS_Store
+Thumb
