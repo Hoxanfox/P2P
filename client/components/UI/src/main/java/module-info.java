@@ -12,5 +12,9 @@ module p2p.ui {
     requires GlobalInterfaces;
 
     opens p2p.ui to javafx.fxml;
+    opens p2p.ui.Controllers to javafx.fxml;
+
     exports p2p.ui;
+    exports p2p.ui.Controllers;
+
 }
