@@ -1,22 +1,18 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <img id="logo" alt="Wails logo" src="./assets/images/logo-universal.png"/>
-  <HelloWorld/>
+  <SplashScreen v-if="loading" />
+  <Dashboard v-else />
 </template>
 
-<style>
-#logo {
-  display: block;
-  width: 50%;
-  height: 50%;
-  margin: auto;
-  padding: 10% 0 0;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  background-origin: content-box;
-}
-</style>
+<script setup>
+import { ref, onMounted } from 'vue';
+import SplashScreen from './components/SplashScreen.vue';
+import Dashboard from './components/Dashboard.vue';
+
+const loading = ref(true);
+
+onMounted(() => {
+  setTimeout(() => {
+    loading.value = false;
+  }, 3000); // Muestra el splash screen durante 3 segundos
+});
+</script>
