@@ -62,13 +62,15 @@
   }
 
   .log-area {
+    display: flex;
+    flex-direction: column;
     padding-left: 2rem;
     padding-right: 4rem;
   }
 
   textarea {
     width: 100%;
-    height: 200px;
+    min-height: 200px;
     background-color: #1e1f29;
     color: white;
     border: none;
