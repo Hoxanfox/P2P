@@ -1,24 +1,26 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class Usuario {
 
-    private Long id;
+    private UUID id;
     private String nombre;
     private String email;
     private String password;
     private String foto;
     private String estado;
     private LocalDateTime fechaRegistro;
+    private Chat chat;
 
     // Constructor vacío
     public Usuario() {
     }
 
     // Constructor con todos los campos (excepto id si quieres que sea opcional)
-    public Usuario(Long id, String nombre, String email, String password, String foto, String estado, LocalDateTime fechaRegistro) {
-        this.id = id;
+    public Usuario(UUID id, String nombre, String email, String password, String foto, String estado, LocalDateTime fechaRegistro) {
+        this.id = UUID.fromString(String.valueOf(id));
         this.nombre = nombre;
         this.email = email;
         this.password = password;
@@ -29,11 +31,11 @@ public class Usuario {
 
     // Getters y Setters
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -83,5 +85,12 @@ public class Usuario {
 
     public void setFechaRegistro(LocalDateTime fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
+    }
+
+    public Chat getChat() {
+        return chat;
+    }
+    public void setChat(Chat chat) {
+        this.chat = chat;
     }
 }

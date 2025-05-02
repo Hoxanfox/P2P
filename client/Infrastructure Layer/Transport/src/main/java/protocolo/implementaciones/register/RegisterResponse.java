@@ -6,7 +6,7 @@ public class RegisterResponse implements ResponseRoute {
 
     private String status;
     private String message;
-    private int userId;
+    private String userId; // Ahora UUID en formato string
     private String username;
 
     @Override
@@ -20,14 +20,11 @@ public class RegisterResponse implements ResponseRoute {
             status = "error";
         }
 
-        // Extraer message (súper simple)
+        // Extraer message
         message = extractValue(jsonResponse, "message");
 
-        // Extraer userId (convertir a int)
-        String userIdStr = extractValue(jsonResponse, "userId");
-        if (userIdStr != null && !userIdStr.isEmpty()) {
-            userId = Integer.parseInt(userIdStr);
-        }
+        // Extraer userId como UUID (string)
+        userId = extractValue(jsonResponse, "userId");
 
         // Extraer username
         username = extractValue(jsonResponse, "username");
@@ -45,7 +42,7 @@ public class RegisterResponse implements ResponseRoute {
 
             // Verificar si es String o número
             if (json.charAt(start) == '\"') {
-                start++; // Saltar la primera comilla
+                start++; // Saltar comilla inicial
                 int end = json.indexOf("\"", start);
                 return json.substring(start, end);
             } else {
@@ -71,7 +68,7 @@ public class RegisterResponse implements ResponseRoute {
         return message;
     }
 
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
 

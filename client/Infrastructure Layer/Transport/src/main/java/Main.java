@@ -28,7 +28,7 @@ public class Main {
         // 4. Procesar la respuesta
         if (jsonResponse != null) {
             RegisterResponse registerResponse = new RegisterResponse();
-            registerResponse.fromJson(jsonResponse);
+            registerResponse.fromJson(jsonResponse);1
 
             // 5. Mostrar los resultados
             System.out.println("[RESULTADO] Estado: " + registerResponse.getStatus());

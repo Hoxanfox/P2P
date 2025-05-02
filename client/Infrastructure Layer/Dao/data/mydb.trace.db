@@ -1,0 +1,54 @@
+2025-05-01 17:54:09.152815Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USUARIOS" not found (this database is empty); SQL statement:
+    INSERT INTO usuarios (id, nombre, email, password, foto, estado, fecha_registro)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+ [42104-224]
+2025-05-01 17:54:09.257770Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USUARIOS" not found (this database is empty); SQL statement:
+    INSERT INTO usuarios (id, nombre, email, password, foto, estado, fecha_registro)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+ [42104-224]
+2025-05-01 17:54:09.294898Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USUARIOS" not found (this database is empty); SQL statement:
+SELECT * FROM usuarios [42104-224]
+2025-05-01 17:54:09.366203Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USUARIOS" not found (this database is empty); SQL statement:
+    INSERT INTO usuarios (id, nombre, email, password, foto, estado, fecha_registro)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+ [42104-224]
+2025-05-01 18:07:06.706311Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USUARIOS" not found (this database is empty); SQL statement:
+    INSERT INTO usuarios (id, nombre, email, password, foto, estado, fecha_registro)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+ [42104-224]
+2025-05-01 18:07:06.841274Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USUARIOS" not found (this database is empty); SQL statement:
+    INSERT INTO usuarios (id, nombre, email, password, foto, estado, fecha_registro)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+ [42104-224]
+2025-05-01 18:07:06.895965Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USUARIOS" not found (this database is empty); SQL statement:
+SELECT * FROM usuarios [42104-224]
+2025-05-01 18:07:06.950077Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USUARIOS" not found (this database is empty); SQL statement:
+    INSERT INTO usuarios (id, nombre, email, password, foto, estado, fecha_registro)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+ [42104-224]
+2025-05-01 18:09:11.812841Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USUARIOS" not found (this database is empty); SQL statement:
+    INSERT INTO usuarios (id, nombre, email, password, foto, estado, fecha_registro)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+ [42104-224]
+2025-05-01 18:09:11.955261Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USUARIOS" not found (this database is empty); SQL statement:
+    INSERT INTO usuarios (id, nombre, email, password, foto, estado, fecha_registro)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+ [42104-224]
+2025-05-01 18:09:12.017026Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USUARIOS" not found (this database is empty); SQL statement:
+SELECT * FROM usuarios [42104-224]
+2025-05-01 18:09:12.077070Z jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USUARIOS" not found (this database is empty); SQL statement:
+    INSERT INTO usuarios (id, nombre, email, password, foto, estado, fecha_registro)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+ [42104-224]
