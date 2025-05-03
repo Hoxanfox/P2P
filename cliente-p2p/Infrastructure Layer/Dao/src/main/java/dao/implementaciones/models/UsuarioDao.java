@@ -1,4 +1,4 @@
-package dao.implementaciones.usuario.models;
+package dao.implementaciones.models;
 
 import dao.DatabaseConfig;
 import dao.interfaces.IUsuarioDao;

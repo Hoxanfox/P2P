@@ -10,12 +10,41 @@ public class MiembroCanalDto {
 
     public MiembroCanalDto() {}
 
-    public MiembroCanalDto(UUID id, String nombre, String email, boolean estado) {
+    public MiembroCanalDto(UUID id, String email) {
         this.id = id;
-        this.nombre = nombre;
+
         this.email = email;
-        this.estado = estado;
     }
 
-    // Getters y Setters
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
 }

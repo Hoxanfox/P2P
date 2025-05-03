@@ -1,10 +1,7 @@
 package repository;
 
-import dao.implementaciones.usuario.models.UsuarioDao;
+import dao.implementaciones.models.UsuarioDao;
 import model.Usuario;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class UsuarioRepository {
 

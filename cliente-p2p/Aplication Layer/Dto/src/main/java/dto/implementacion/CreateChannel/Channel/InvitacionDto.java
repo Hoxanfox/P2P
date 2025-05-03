@@ -1,28 +1,27 @@
 package dto.implementacion.CreateChannel.Channel;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class InvitacionDto {
-    private Long id;
+    private UUID id;
     private DestinatarioDto destinatario;
-    private LocalDateTime fechaEnvio;
+    private String fechaEnvio;
     private String estado;
 
     public InvitacionDto() {}
 
-    public InvitacionDto(Long id, DestinatarioDto destinatario, LocalDateTime fechaEnvio, String estado) {
-        this.id = id;
+    public InvitacionDto( DestinatarioDto destinatario) {
         this.destinatario = destinatario;
-        this.fechaEnvio = fechaEnvio;
-        this.estado = estado;
+
     }
 
     // Getters y Setters
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -34,11 +33,11 @@ public class InvitacionDto {
         this.destinatario = destinatario;
     }
 
-    public LocalDateTime getFechaEnvio() {
+    public String getFechaEnvio() {
         return fechaEnvio;
     }
 
-    public void setFechaEnvio(LocalDateTime fechaEnvio) {
+    public void setFechaEnvio(String fechaEnvio) {
         this.fechaEnvio = fechaEnvio;
     }
 

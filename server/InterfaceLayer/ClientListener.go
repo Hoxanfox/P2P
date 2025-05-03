@@ -1,187 +1,190 @@
 package main
 
 import (
-    "bufio"
-    "encoding/json"
-    "fmt"
-    "io"
-    "net"
-    "strings"
-
-    "github.com/google/uuid"
+	"encoding/json"
+	"fmt"
+	"net"
 )
 
-// Estructura general del mensaje entrante
 type Message struct {
-    Command string          `json:"command"`
-    Data    json.RawMessage `json:"data"`
+	Command string          `json:"command"`
+	Data    json.RawMessage `json:"data"`
 }
 
-// Datos esperados para login
-type LoginData struct {
-    Email    string `json:"email"`
-    Password string `json:"password"`
-}
-
-// Respuesta genérica del servidor
-type GenericResponse struct {
-    Status  string      `json:"status"`
-    Message string      `json:"message"`
-    Data    interface{} `json:"data,omitempty"`
-}
-
-// Estructura de usuario con UUID
+// Estructuras de datos
 type User struct {
-    ID          string `json:"id"` // UUID
-    Nombre      string `json:"nombre"`
-    Email       string `json:"email"`
-    IsConnected bool   `json:"is_connected"`
+	ID     string
+	Email  string
+	Nombre string
 }
 
-// Lista simulada de usuarios
+type File struct {
+	ID     int    `json:"id"`
+	Nombre string `json:"nombre"`
+}
+
+type Member struct {
+	ID     string `json:"id"`
+	Nombre string `json:"nombre"`
+}
+
+type Chat struct {
+	ID         int      `json:"id"`
+	Tipo       string   `json:"tipo"`
+	Miembros   []Member `json:"miembros"`
+	TipoChatID string      `json:"tipoChatId"`
+}
+
+type MessageData struct {
+	Mensaje struct {
+		Remitente struct {
+			ID     string `json:"id"`
+			Nombre string `json:"correo"` // se llama 'correo' en el JSON de entrada
+		} `json:"remitente"`
+		Destinatario struct {
+			ID     string `json:"id"`
+			Nombre string `json:"correo"` // se llama 'correo' en el JSON de entrada
+		} `json:"destinatario"`
+		Contenido  string `json:"contenido"`
+		FechaEnvio string `json:"fechaEnvio"`
+		Archivo    *File  `json:"archivo"`
+	} `json:"mensaje"`
+}
+
+type MessageResponse struct {
+	ID           string     `json:"id"`
+	Remitente    Member  `json:"remitente"`
+	Destinatario Member  `json:"destinatario"`
+	Contenido    string  `json:"contenido"`
+	FechaEnvio   string  `json:"fechaEnvio"`
+	Archivo      *File   `json:"archivo"`
+	Chat         Chat    `json:"chat"`
+}
+
+type GenericResponse struct {
+	Status  string      `json:"status"`
+	Message string      `json:"message"`
+	Data    interface{} `json:"data,omitempty"`
+}
+
+// Usuarios disponibles
 var users = []User{
-    {
-        ID:          uuid.New().String(),
-        Nombre:      "juan123",
-        Email:       "juan@example.com",
-        IsConnected: true,
-    },
-    {
-        ID:          uuid.New().String(),
-        Nombre:      "ana456",
-        Email:       "ana@example.com",
-        IsConnected: false,
-    },
-    // Puedes agregar más usuarios aquí
+	{
+		ID:     "210c3aea-d243-4b6c-8456-7bb67ff5306e",
+		Email:  "ana.torres@correo.com",
+		Nombre: "Ana Torres",
+	},
+	{
+		ID:     "0db20b34-00a6-48d0-8ebb-49de460a99a4",
+		Email:  "luis.mendoza@correo.com",
+		Nombre: "Luis Mendoza",
+	},
 }
 
+// Envío de respuesta
+func sendResponse(conn net.Conn, response GenericResponse) {
+	respBytes, _ := json.Marshal(response)
+	conn.Write(append(respBytes, '\n'))
+}
+
+// Ruta: send-message-user
+func handleSendMessageUser(conn net.Conn, msg Message) {
+	var request MessageData
+	if err := json.Unmarshal(msg.Data, &request); err != nil {
+		sendResponse(conn, GenericResponse{"error", "Datos inválidos del mensaje", nil})
+		return
+	}
+
+	remitenteEmail := request.Mensaje.Remitente.Nombre
+	destinatarioEmail := request.Mensaje.Destinatario.Nombre
+
+	var remitente *User
+	var destinatario *User
+
+	for i := range users {
+		if users[i].Email == remitenteEmail {
+			remitente = &users[i]
+		}
+		if users[i].Email == destinatarioEmail {
+			destinatario = &users[i]
+		}
+	}
+
+	if remitente == nil || destinatario == nil {
+		sendResponse(conn, GenericResponse{"error", "No se pudo enviar el mensaje. Verifique los datos del usuario o del chat.", nil})
+		return
+	}
+
+	response := MessageResponse{
+		ID: "210c3aea-d243-4b6c-8456-7bb67ff5306e",
+		Remitente: Member{
+			ID:     remitente.ID,
+			Nombre: remitente.Nombre,
+		},
+		Destinatario: Member{
+			ID:     destinatario.ID,
+			Nombre: destinatario.Nombre,
+		},
+		Contenido:  request.Mensaje.Contenido,
+		FechaEnvio: request.Mensaje.FechaEnvio,
+		Archivo:    request.Mensaje.Archivo,
+		Chat: Chat{
+			ID:   7,
+			Tipo: "privado",
+			Miembros: []Member{
+				{ID: remitente.ID, Nombre: remitente.Nombre},
+				{ID: destinatario.ID, Nombre: destinatario.Nombre},
+			},
+			TipoChatID: "210c3aea-d243-4b6c-8456-7bb67ff5306e",
+		},
+	}
+
+	sendResponse(conn, GenericResponse{
+		Status:  "success",
+		Message: "Mensaje enviado correctamente",
+		Data:    response,
+	})
+}
+
+// Manejo de comandos
 func handleConnection(conn net.Conn) {
-    defer conn.Close()
-    fmt.Println("Nueva conexión desde:", conn.RemoteAddr())
+	defer conn.Close()
 
-    reader := bufio.NewReader(conn)
+	var buffer = make([]byte, 4096)
+	n, err := conn.Read(buffer)
+	if err != nil {
+		fmt.Println("[ERROR] No se pudo leer la conexión:", err)
+		return
+	}
 
-    for {
-        raw, err := reader.ReadString('\n')
-        if err != nil {
-            if err == io.EOF {
-                fmt.Println("Cliente desconectado:", conn.RemoteAddr())
-            } else {
-                fmt.Println("Error leyendo del cliente:", err)
-            }
-            return
-        }
+	var msg Message
+	if err := json.Unmarshal(buffer[:n], &msg); err != nil {
+		sendResponse(conn, GenericResponse{"error", "Formato de mensaje inválido", nil})
+		return
+	}
 
-        raw = strings.TrimSpace(raw)
-        if raw == "" {
-            continue
-        }
-
-        fmt.Println("Recibido:", raw)
-
-        var msg Message
-        err = json.Unmarshal([]byte(raw), &msg)
-        if err != nil {
-            fmt.Println("Error al parsear JSON:", err)
-            continue
-        }
-
-        switch msg.Command {
-        case "login":
-            handleLogin(conn, msg)
-        case "list-users":
-            handleListUsers(conn)
-        default:
-            sendResponse(conn, GenericResponse{
-                Status:  "error",
-                Message: "Comando no soportado",
-            })
-        }
-    }
+	if msg.Command == "send-message-user" {
+		handleSendMessageUser(conn, msg)
+	} else {
+		sendResponse(conn, GenericResponse{"error", "Comando no reconocido", nil})
+	}
 }
 
-func handleLogin(conn net.Conn, msg Message) {
-    var data LoginData
-    err := json.Unmarshal(msg.Data, &data)
-    if err != nil {
-        fmt.Println("Error leyendo datos de login:", err)
-        sendResponse(conn, GenericResponse{
-            Status:  "error",
-            Message: "Error procesando los datos de login",
-        })
-        return
-    }
-
-    if data.Email == "juan.perez@ejeasdasdplo.cm" && data.Password == "123adsasd456" {
-        user := map[string]interface{}{
-            "id":           uuid.New().String(),
-            "nombre":       "juan123",
-            "email":        "juan@mail.com",
-            "photo":        "base64_encoded_image_string",
-            "ip":           "192.168.1.15",
-            "created_at":   "2025-04-28T10:30:00",
-            "is_connected": true,
-        }
-
-        sendResponse(conn, GenericResponse{
-            Status:  "success",
-            Message: "Inicio de sesión exitoso",
-            Data:    user,
-        })
-    } else {
-        sendResponse(conn, GenericResponse{
-            Status:  "error",
-            Message: "Email o contraseña incorrectos",
-        })
-    }
-}
-
-func handleListUsers(conn net.Conn) {
-    if len(users) == 0 {
-        sendResponse(conn, GenericResponse{
-            Status:  "error",
-            Message: "No se pudieron obtener los usuarios registrados",
-        })
-        return
-    }
-
-    sendResponse(conn, GenericResponse{
-        Status:  "success",
-        Message: "Usuarios registrados obtenidos correctamente",
-        Data:    users,
-    })
-}
-
-func sendResponse(conn net.Conn, content interface{}) {
-    bytes, err := json.Marshal(content)
-    if err != nil {
-        fmt.Println("Error serializando respuesta:", err)
-        return
-    }
-
-    fmt.Println("Enviando respuesta:", string(bytes))
-
-    if _, err := conn.Write(append(bytes, '\n')); err != nil {
-        fmt.Println("Error enviando respuesta al cliente:", err)
-    }
-}
-
+// Servidor principal
 func main() {
-    listener, err := net.Listen("tcp", ":9000")
-    if err != nil {
-        panic(err)
-    }
-    defer listener.Close()
+	listener, err := net.Listen("tcp", ":9000")
+	if err != nil {
+		panic(err)
+	}
+	defer listener.Close()
+	fmt.Println("[INFO] Servidor TCP escuchando en el puerto 9000")
 
-    fmt.Println("Servidor TCP escuchando en el puerto 9000...")
-
-    for {
-        conn, err := listener.Accept()
-        if err != nil {
-            fmt.Println("Error aceptando conexión:", err)
-            continue
-        }
-
-        go handleConnection(conn)
-    }
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			fmt.Println("[ERROR] Error al aceptar conexión:", err)
+			continue
+		}
+		go handleConnection(conn)
+	}
 }

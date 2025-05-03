@@ -10,6 +10,7 @@ public class CreateChannelRequestDto {
     private String descripcion;
     private List<MiembroCanalDto> miembros;
     private List<InvitacionDto> invitaciones;
+    private String tipo;
 
     // Getters y Setters
     public String getNombre() {
@@ -43,4 +44,12 @@ public class CreateChannelRequestDto {
     public void setInvitaciones(List<InvitacionDto> invitaciones) {
         this.invitaciones = invitaciones;
     }
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
 }

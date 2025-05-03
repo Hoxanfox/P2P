@@ -1,12 +1,11 @@
 package test;
 
 import dao.DatabaseConfig;
-import dao.implementaciones.usuario.models.UsuarioDao;
+import dao.implementaciones.models.UsuarioDao;
 import model.Usuario;
 
 import java.sql.Connection;
 import java.sql.Statement;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 

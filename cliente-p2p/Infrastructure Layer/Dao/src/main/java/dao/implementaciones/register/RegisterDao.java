@@ -1,4 +1,4 @@
-package dao.implementaciones.usuario.register;
+package dao.implementaciones.register;
 
 import dao.DatabaseConfig;
 import dto.implementacion.register.RegisterResponseDto;

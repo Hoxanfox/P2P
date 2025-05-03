@@ -1,6 +1,6 @@
 package facade.implementaciones;
 
-import dao.implementaciones.usuario.register.RegisterDao;
+import dao.implementaciones.register.RegisterDao;
 import dto.implementacion.register.RegisterRequestDto;
 import dto.implementacion.register.RegisterResponseDto;
 import facade.interfaces.IRegisterFacade;
@@ -8,8 +8,6 @@ import protocolo.implementaciones.register.RegisterRequest;
 import protocolo.implementaciones.register.RegisterResponse;
 import transport.TransportContext;
 import transport.interfaces.ITransportStrategy;
-
-import transport.TcpTransportStrategy;
 
 import java.sql.SQLException;
 
