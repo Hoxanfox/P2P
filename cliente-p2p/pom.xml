@@ -16,6 +16,7 @@
         <module>Aplication Layer/Dto</module>
         <module>Domain Layer/Facade</module>
         <module>Aplication Layer/Contoller</module>
+        <module>Aplication Layer/UI</module>
     </modules>
 
     <properties>

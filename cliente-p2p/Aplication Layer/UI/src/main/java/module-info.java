@@ -12,5 +12,8 @@ module appmain.ui {
     requires com.almasb.fxgl.all;
 
     opens appmain.ui to javafx.fxml;
+    opens appmain.ui.Controllers to javafx.fxml;
+
     exports appmain.ui;
+    exports appmain.ui.Controllers;
 }
