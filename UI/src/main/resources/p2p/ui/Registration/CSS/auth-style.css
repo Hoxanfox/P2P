@@ -59,7 +59,7 @@
 /* Botón de enviar login */
 .auth-submit-button {
     -fx-background-color: -fx-dracula-purple;
-    -fx-text-fill: -fx-dracula-background;
+    -fx-text-fill: -fx-dracula-foreground;
     -fx-font-weight: bold;
     -fx-background-radius: 8px;
     -fx-padding: 10px 20px;
@@ -72,7 +72,7 @@
 
 /* Texto adicional debajo del formulario */
 .auth-text {
-    -fx-text-fill: -fx-dracula-comment;
+    -fx-text-fill: -fx-dracula-foreground;
 }
 
 /* Contenedor del botón volver */
@@ -85,6 +85,7 @@
     -fx-background-color: transparent;
     -fx-cursor: hand;
     -fx-padding: 5px;
+    -fx-text-fill: -fx-dracula-foreground;
 }
 
 .back-button:hover {
@@ -104,4 +105,8 @@
     -fx-text-fill: -fx-dracula-green;
     -fx-font-weight: bold;
     -fx-padding: 0 0 0 5px;
+}
+
+.terms-checkbox, .auth-text {
+    -fx-text-fill: -fx-dracula-foreground;
 }

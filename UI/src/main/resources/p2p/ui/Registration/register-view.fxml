@@ -1,68 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
-<StackPane xmlns:fx="http://javafx.com/fxml"
-           fx:controller="p2p.ui.Controllers.RegisterViewController"
-           stylesheets="@CSS/auth-style.css,@../CSS/colors.css"
-           styleClass="auth-container">
+<StackPane styleClass="auth-container" stylesheets="@CSS/auth-style.css,@../CSS/colors.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.12" fx:controller="p2p.ui.Controllers.RegisterViewController">
 
-    <VBox styleClass="auth-box" alignment="CENTER" spacing="20">
-        <Circle radius="30" styleClass="auth-logo"/>
-        <Text text="Crear una cuenta" styleClass="auth-title"/>
+    <VBox alignment="CENTER" spacing="20" styleClass="auth-box">
+        <Circle radius="30" styleClass="auth-logo" />
+        <Text styleClass="auth-title" text="Crear una cuenta" />
 
         <VBox spacing="15" styleClass="form-container">
-            <HBox spacing="10">
-                <VBox spacing="5" HBox.hgrow="ALWAYS">
-                    <Label text="Nombre" styleClass="form-label"/>
-                    <TextField fx:id="firstNameField" promptText="Nombre" styleClass="form-field"/>
-                </VBox>
-                <VBox spacing="5" HBox.hgrow="ALWAYS">
-                    <Label text="Apellido" styleClass="form-label"/>
-                    <TextField fx:id="lastNameField" promptText="Apellido" styleClass="form-field"/>
-                </VBox>
+            <VBox spacing="5">
+                <Label styleClass="form-label" text="Nombre de usuario" />
+                <TextField fx:id="usernameField" promptText="nombre_usuario" styleClass="form-field" />
+            </VBox>
+
+            <VBox spacing="5">
+                <Label styleClass="form-label" text="Correo electrónico" />
+                <TextField fx:id="emailField" promptText="tu.correo@universidad.edu" styleClass="form-field" />
+            </VBox>
+
+            <VBox spacing="5">
+                <Label styleClass="form-label" text="Contraseña" />
+                <PasswordField fx:id="passwordField" promptText="Mínimo 8 caracteres" styleClass="form-field" />
+            </VBox>
+
+            <VBox spacing="5">
+                <Label styleClass="form-label" text="Confirmar contraseña" />
+                <PasswordField fx:id="confirmPasswordField" promptText="Confirma tu contraseña" styleClass="form-field" />
+            </VBox>
+
+            <CheckBox fx:id="termsCheckbox" styleClass="terms-checkbox" text="Acepto los términos y condiciones" />
+
+            <HBox alignment="CENTER">
+                <Button fx:id="registerButton" defaultButton="true" styleClass="auth-submit-button" text="Registrarse" textFill="#fcfcfc" />
             </HBox>
 
-            <VBox spacing="5">
-                <Label text="Nombre de usuario" styleClass="form-label"/>
-                <TextField fx:id="usernameField" promptText="nombre_usuario" styleClass="form-field"/>
-            </VBox>
-
-            <VBox spacing="5">
-                <Label text="Correo electrónico" styleClass="form-label"/>
-                <TextField fx:id="emailField" promptText="tu.correo@universidad.edu" styleClass="form-field"/>
-            </VBox>
-
-            <VBox spacing="5">
-                <Label text="Contraseña" styleClass="form-label"/>
-                <PasswordField fx:id="passwordField" promptText="Mínimo 8 caracteres" styleClass="form-field"/>
-            </VBox>
-
-            <VBox spacing="5">
-                <Label text="Confirmar contraseña" styleClass="form-label"/>
-                <PasswordField fx:id="confirmPasswordField" promptText="Confirma tu contraseña" styleClass="form-field"/>
-            </VBox>
-
-            <CheckBox fx:id="termsCheckbox" text="Acepto los términos y condiciones" styleClass="terms-checkbox"/>
-
-            <Button fx:id="registerButton" text="Registrarse" styleClass="auth-submit-button" defaultButton="true"/>
-
             <HBox alignment="CENTER" spacing="10">
-                <Text text="¿Ya tienes una cuenta?" styleClass="auth-text"/>
-                <Hyperlink fx:id="loginLink" text="Inicia sesión" styleClass="auth-link"/>
+                <Text fill="#f8f8f8" styleClass="auth-text" text="¿Ya tienes una cuenta?" />
+                <Hyperlink fx:id="loginLink" styleClass="auth-link" text="Inicia sesión" />
             </HBox>
         </VBox>
 
-        <HBox styleClass="back-container" alignment="CENTER_LEFT">
-            <Button fx:id="backButton" styleClass="back-button">
+        <HBox alignment="CENTER_LEFT" styleClass="back-container">
+            <Button fx:id="backButton" styleClass="back-button" text="Volver">
                 <graphic>
-                    <Region styleClass="back-icon"/>
+                    <Region styleClass="back-icon" />
                 </graphic>
-                <Label text="Volver" styleClass="back-text"/>
             </Button>
         </HBox>
     </VBox>
