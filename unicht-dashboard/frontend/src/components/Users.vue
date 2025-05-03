@@ -129,7 +129,7 @@ function handleAction(user) {
 
 button {
     padding: 0.5rem 1rem;
-    background-color: var(--purple);
+    background-color: var(--pink);
     color: var(--bg);
     border: none;
     border-radius: 6px;
@@ -138,7 +138,7 @@ button {
 }
 
 button:hover {
-    background-color: var(--cyan);
+    background-color: var(--green);
     color: var(--bg);
 }
 </style>
