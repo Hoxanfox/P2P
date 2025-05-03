@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.Insets?>
+
+<StackPane fx:id="splashScreenStackPane" xmlns:fx="http://javafx.com/fxml"
+           fx:controller="p2p.ui.Controllers.SplashScreenController"
+           stylesheets="@../SplashScreen/splash-screen.css"
+           styleClass="splash-container">
+
+    <VBox fx:id="splashBox" styleClass="splash-box" alignment="CENTER" spacing="15">
+        <!-- Animación de círculos -->
+        <HBox alignment="CENTER" spacing="15">
+            <Circle fx:id="circle1" radius="8" styleClass="unichat-icon"/>
+            <Circle fx:id="circle2" radius="8" styleClass="unichat-icon"/>
+            <Circle fx:id="circle3" radius="8" styleClass="unichat-icon"/>
+        </HBox>
+
+        <!-- Título principal -->
+        <Text fx:id="splashText" text="UniChat" styleClass="splash-text"/>
+
+        <!-- Tagline -->
+        <Text fx:id="taglineText" text="Conectando estudiantes" styleClass="splash-tagline"/>
+
+        <!-- Barra de progreso -->
+        <ProgressBar fx:id="loadingBar" styleClass="progress-bar" progress="0.0">
+            <VBox.margin>
+                <Insets top="10" bottom="10"/>
+            </VBox.margin>
+        </ProgressBar>
+
+        <!-- Versión -->
+        <Text fx:id="versionText" text="v1.0.0" styleClass="version-text"/>
+    </VBox>
+</StackPane>
