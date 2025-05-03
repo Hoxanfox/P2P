@@ -9,7 +9,6 @@ module p2p.ui {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires com.almasb.fxgl.all;
-    requires GlobalInterfaces;
 
     opens p2p.ui to javafx.fxml;
     opens p2p.ui.Controllers to javafx.fxml;
