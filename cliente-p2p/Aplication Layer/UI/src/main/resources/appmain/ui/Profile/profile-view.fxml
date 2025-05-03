@@ -7,7 +7,7 @@
 <?import javafx.scene.shape.Circle?>
 
 <StackPane xmlns:fx="http://javafx.com/fxml"
-           fx:controller="p2p.ui.Controllers.ProfileViewController"
+           fx:controller="appmain.ui.Controllers.ProfileViewController"
            stylesheets="@CSS/profile-style.css,@../CSS/colors.css"
            styleClass="profile-container">
 

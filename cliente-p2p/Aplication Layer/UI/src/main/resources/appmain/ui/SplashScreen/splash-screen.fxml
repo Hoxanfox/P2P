@@ -9,7 +9,7 @@
 <?import javafx.geometry.Insets?>
 
 <StackPane fx:id="splashScreenStackPane" xmlns:fx="http://javafx.com/fxml"
-           fx:controller="p2p.ui.Controllers.SplashScreenController"
+           fx:controller="appmain.ui.Controllers.SplashScreenController"
            stylesheets="@../SplashScreen/splash-screen.css"
            styleClass="splash-container">
 

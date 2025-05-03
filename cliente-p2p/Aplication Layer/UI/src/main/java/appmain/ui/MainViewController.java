@@ -1,4 +1,4 @@
-package p2p.ui;
+package appmain.ui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,9 +9,9 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import p2p.ui.Controllers.LoginViewController;
-import p2p.ui.Controllers.ProfileViewController;
-import p2p.ui.Controllers.RegisterViewController;
+import appmain.ui.Controllers.LoginViewController;
+import appmain.ui.Controllers.ProfileViewController;
+import appmain.ui.Controllers.RegisterViewController;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -120,7 +120,7 @@ public class MainViewController {
 
     public void openLoginForm() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/p2p/ui/Registration/login-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/appmain/ui/Registration/login-view.fxml"));
             Scene loginScene = new Scene(loader.load(), 400, 500);
 
             LoginViewController controller = loader.getController();
@@ -138,7 +138,7 @@ public class MainViewController {
 
     public void openRegisterForm() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/p2p/ui/Registration/register-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/appmain/ui/Registration/register-view.fxml"));
             Scene registerScene = new Scene(loader.load(), 450, 650);
 
             RegisterViewController controller = loader.getController();

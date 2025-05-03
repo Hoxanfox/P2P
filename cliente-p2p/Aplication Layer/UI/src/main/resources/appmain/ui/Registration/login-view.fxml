@@ -5,7 +5,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<StackPane styleClass="auth-container" stylesheets="@CSS/auth-style.css,@../CSS/colors.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="p2p.ui.Controllers.LoginViewController">
+<StackPane styleClass="auth-container" stylesheets="@CSS/auth-style.css,@../CSS/colors.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="appmain.ui.Controllers.LoginViewController">
 
     <VBox alignment="CENTER" spacing="20" styleClass="auth-box">
         <Circle radius="30" styleClass="auth-logo" />

@@ -9,7 +9,7 @@
 <?import javafx.scene.image.Image?>
 
 <BorderPane fx:id="mainContainer" xmlns:fx="http://javafx.com/fxml"
-            fx:controller="p2p.ui.MainViewController"
+            fx:controller="appmain.ui.MainViewController"
             stylesheets="@CSS/main-style.css,@CSS/colors.css">
 
     <!-- Área superior con información de perfil y controles de la aplicación -->

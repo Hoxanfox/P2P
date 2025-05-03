@@ -1,4 +1,4 @@
-package p2p.ui.Controllers;
+package appmain.ui.Controllers;
 
 import javafx.animation.*;
 import javafx.fxml.FXML;
@@ -191,7 +191,7 @@ public class SplashScreenController {
 
     private void loadMainScreen() {
         try {
-            BorderPane mainRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/p2p/ui/UniChat.fxml")));
+            BorderPane mainRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/appmain/ui/UniChat.fxml")));
             Scene mainScene = new Scene(mainRoot, 800, 600);
 
             Stage splashStage = (Stage) splashScreenStackPane.getScene().getWindow();

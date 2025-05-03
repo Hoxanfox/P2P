@@ -1,9 +1,9 @@
-package p2p.ui.Controllers;
+package appmain.ui.Controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import p2p.ui.MainViewController;
+import appmain.ui.MainViewController;
 
 public class RegisterViewController {
 

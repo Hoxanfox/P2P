@@ -1,4 +1,4 @@
-package p2p.ui;
+package appmain.ui;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +12,7 @@ public class UniChatApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         // Cargar la vista del Splash Screen
-        FXMLLoader splashLoader = new FXMLLoader(getClass().getResource("/p2p/ui/SplashScreen/splash-screen.fxml"));
+        FXMLLoader splashLoader = new FXMLLoader(getClass().getResource("/appmain/ui/SplashScreen/splash-screen.fxml"));
         Scene splashScene = new Scene(splashLoader.load(), 800, 600);
 
         // Mostrar la escena del Splash
