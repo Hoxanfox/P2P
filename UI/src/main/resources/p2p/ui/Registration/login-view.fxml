@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.shape.Circle?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="p2p.ui.Controllers.LoginViewController"
+           stylesheets="@CSS/auth-style.css,@../CSS/colors.css"
+           styleClass="auth-container">
+
+    <VBox styleClass="auth-box" alignment="CENTER" spacing="20">
+        <Circle radius="30" styleClass="auth-logo"/>
+        <Text text="Iniciar Sesión" styleClass="auth-title"/>
+
+        <VBox spacing="15" styleClass="form-container">
+            <VBox spacing="5">
+                <Label text="Correo electrónico" styleClass="form-label"/>
+                <TextField fx:id="emailField" promptText="tu.correo@universidad.edu" styleClass="form-field"/>
+            </VBox>
+
+            <VBox spacing="5">
+                <Label text="Contraseña" styleClass="form-label"/>
+                <PasswordField fx:id="passwordField" promptText="Contraseña" styleClass="form-field"/>
+            </VBox>
+
+            <HBox alignment="CENTER_RIGHT">
+                <Hyperlink fx:id="forgotPasswordLink" text="¿Olvidaste tu contraseña?" styleClass="auth-link"/>
+            </HBox>
+
+            <Button fx:id="loginButton" text="Iniciar Sesión" styleClass="auth-submit-button" defaultButton="true"/>
+
+            <HBox alignment="CENTER" spacing="10">
+                <Text text="¿No tienes una cuenta?" styleClass="auth-text"/>
+                <Hyperlink fx:id="registerLink" text="Regístrate" styleClass="auth-link"/>
+            </HBox>
+        </VBox>
+
+        <HBox styleClass="back-container" alignment="CENTER_LEFT">
+            <Button fx:id="backButton" styleClass="back-button">
+                <graphic>
+                    <Region styleClass="back-icon"/>
+                </graphic>
+                <Label text="Volver" styleClass="back-text"/>
+            </Button>
+        </HBox>
+    </VBox>
+</StackPane>
