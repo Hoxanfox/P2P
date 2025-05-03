@@ -1,1 +1,112 @@
-,jdgonzalez,aspire,03.05.2025 14:20,file:///home/jdgonzalez/.config/libreoffice/4;
+/* auth-style.css - basado en el tema Dracula */
+
+/* Contenedor principal */
+.auth-container {
+    -fx-background-color: -fx-dracula-background;
+}
+
+/* Caja del login */
+.auth-box {
+    -fx-background-color: derive(-fx-dracula-background, 10%);
+    -fx-padding: 40px;
+    -fx-background-radius: 15px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 10, 0, 0, 5);
+}
+
+/* Logo */
+.auth-logo {
+    -fx-fill: -fx-dracula-purple;
+}
+
+/* Título de la pantalla de autenticación */
+.auth-title {
+    -fx-font-size: 24px;
+    -fx-fill: -fx-dracula-cyan;
+    -fx-font-weight: bold;
+}
+
+/* Contenedor de formulario */
+.form-container {
+    -fx-padding: 10px 0 0 0;
+}
+
+/* Etiquetas de los campos */
+.form-label {
+    -fx-text-fill: -fx-dracula-foreground;
+    -fx-font-size: 12px;
+}
+
+/* Campos de texto */
+.form-field {
+    -fx-background-color: derive(-fx-dracula-background, 20%);
+    -fx-text-fill: -fx-dracula-foreground;
+    -fx-prompt-text-fill: -fx-dracula-comment;
+    -fx-background-radius: 8px;
+    -fx-border-color: transparent;
+    -fx-padding: 8px;
+}
+
+/* Links de autenticación (como '¿Olvidaste tu contraseña?' y 'Regístrate') */
+.auth-link {
+    -fx-text-fill: -fx-dracula-pink;
+    -fx-underline: true;
+}
+
+.auth-link:hover {
+    -fx-text-fill: -fx-dracula-purple;
+}
+
+/* Botón de enviar login */
+.auth-submit-button {
+    -fx-background-color: -fx-dracula-purple;
+    -fx-text-fill: -fx-dracula-foreground;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8px;
+    -fx-padding: 10px 20px;
+}
+
+.auth-submit-button:hover {
+    -fx-background-color: -fx-dracula-cyan;
+    -fx-text-fill: -fx-dracula-background;
+}
+
+/* Texto adicional debajo del formulario */
+.auth-text {
+    -fx-text-fill: -fx-dracula-foreground;
+}
+
+/* Contenedor del botón volver */
+.back-container {
+    -fx-padding: 10px 0 0 0;
+}
+
+/* Botón de volver */
+.back-button {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+    -fx-padding: 5px;
+    -fx-text-fill: -fx-dracula-foreground;
+}
+
+.back-button:hover {
+    -fx-background-color: derive(-fx-dracula-background, 20%);
+}
+
+/* Icono de volver */
+.back-icon {
+    -fx-background-color: -fx-dracula-green;
+    -fx-shape: "M 10 0 L 0 10 L 10 20";
+    -fx-min-width: 10px;
+    -fx-min-height: 20px;
+}
+
+/* Texto de volver */
+.back-text {
+    -fx-text-fill: -fx-dracula-green;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 0 5px;
+}
+
+.terms-checkbox, .auth-text {
+    -fx-text-fill: -fx-dracula-foreground;
+}
