@@ -27,7 +27,7 @@
 
 /* Search field */
 .search-container {
-    -fx-padding: 10px 0;
+    -fx-padding: 10px 5px;
 }
 .search-field {
     -fx-background-color: -fx-dracula-comment;
@@ -45,11 +45,64 @@
     -fx-tab-text-color: -fx-dracula-foreground;
     -fx-background-color: -fx-dracula-background;
 }
+.tab-pane {
+    -fx-background-color: transparent;
+}
+
+.tab-pane .tab-header-area {
+    -fx-background-color: transparent;
+}
+
+.tab-pane .tab-header-background {
+    -fx-background-color: transparent;
+}
+
+.tab-pane .tab-content-area {
+    -fx-background-color: transparent;
+}
+
+.tab-pane .tab-content-background {
+    -fx-background-color: transparent;
+}
+
+.tab {
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-dracula-foreground;
+}
+
+.tab:selected {
+    -fx-background-color: #44475a; /* o el color que uses para la pestaña activa */
+}
+
+
 .tab {
     -fx-background-color: -fx-dracula-background;
+    -fx-text-fill: -fx-dracula-foreground;
+}
+.tab-pane {
+    -fx-background-color: #282a36;
+}
+
+.tab-pane .tab-header-area {
+    -fx-background-color: #282a36;
+}
+
+.tab-pane .tab {
+    -fx-background-color: #44475a;
+    -fx-text-base-color: #f8f8f2;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: #6272a4;
+}
+
+.tab-pane .tab-label {
+    -fx-text-fill: #f8f8f2;
 }
 
 /* Section headers (Contactos/Grupos) */
+
+
 .section-header {
     -fx-padding: 10px;
     -fx-alignment: CENTER_LEFT;
@@ -61,10 +114,36 @@
     -fx-font-weight: bold;
 }
 
-/* ScrollPane for contacts */
+/* ScrollPane fondo y bordes */
 .contacts-scroll {
-    -fx-background-color: -fx-dracula-background;
+    -fx-background-color: transparent;
+    -fx-border-color: -fx-dracula-comment;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
 }
+
+/* Estilo del contenido dentro del ScrollPane */
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Scrollbars personalizados */
+.scroll-pane .scroll-bar:vertical,
+.scroll-pane .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .thumb {
+    -fx-background-color: -fx-dracula-cyan;
+    -fx-background-insets: 2;
+    -fx-background-radius: 5px;
+}
+
+.scroll-pane .thumb:hover {
+    -fx-background-color: derive(-fx-dracula-cyan, -20%);
+}
+
 
 /* Container for contacts and groups */
 .contacts-container {
@@ -75,6 +154,8 @@
 /* Icon Buttons (Settings, Add, Attach) */
 .icon-button {
     -fx-background-color: transparent;
+    -fx-text-fill: -fx-dracula-foreground;
+    -fx-fill-width: bold;
     -fx-cursor: hand;
     -fx-padding: 5px;
 }
@@ -90,15 +171,72 @@
     -fx-min-height: 16px;
 }
 
+/*Contactos estilos*/
+/* Contenedor general del ítem */
+.contact-item {
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+    -fx-alignment: center-left;
+    -fx-background-color: #2c2f3f;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 1);
+    -fx-transition: background-color 0.3s ease;
+}
+
+.contact-item:hover {
+    -fx-background-color: #3a3d4f;
+}
+
+/* Círculo del avatar */
+.contact-pic {
+    -fx-fill: linear-gradient(to bottom, #9c88ff, #6a89cc); /* tonos morado/azul */
+    -fx-stroke: #ffffff;
+    -fx-stroke-width: 2;
+}
+
+/* Contenedor de info (nombre + estado) */
+.contact-info {
+    -fx-spacing: 3px;
+}
+
+/* Nombre del contacto o grupo */
+.contact-name {
+    -fx-font-size: 14px;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+}
+
+/* Estado ("En línea", "3 miembros", etc.) */
+.contact-status {
+    -fx-font-size: 12px;
+    -fx-text-fill: #a0a0a0;
+}
+
+
 /* Profile pic */
 .profile-pic {
-    -fx-fill: -fx-dracula-pink;
+    -fx-fill: linear-gradient(to bottom right, -fx-dracula-pink, #ff8ecf);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 4, 0.5, 0, 2);
+}
+
+/* Profile button */
+.profile-button {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 20px;
+    -fx-padding: 5 15 5 10;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 3, 0.3, 0, 1);
+    -fx-border-color: transparent;
+    -fx-alignment: center-left;
 }
 
 /* Username label */
 .username-label {
     -fx-text-fill: -fx-dracula-foreground;
     -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 1, 0, 0, 1);
 }
 
 /* Welcome screen */
@@ -165,12 +303,23 @@
 .send-button {
     -fx-background-color: -fx-dracula-green;
     -fx-text-fill: -fx-dracula-background;
-    -fx-background-radius: 5px;
+    -fx-background-radius: 4px;
+    -fx-font-weight: bold;
+    -fx-padding: 4px 8px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 4, 0, 0, 2);
     -fx-cursor: hand;
+    -fx-transition: all 0.3s ease-in-out;
 }
+
 .send-button:hover {
-    -fx-background-color: derive(-fx-dracula-green, -20%);
+    -fx-background-color: linear-gradient(to bottom, #00e676, #00c853); /* más brillante al pasar el mouse */
 }
+
+.send-button:pressed {
+    -fx-background-color: #00a84f; /* más oscuro al presionar */
+    -fx-translate-y: 1;
+}
+
 
 /* Login screen */
 .login-screen {
