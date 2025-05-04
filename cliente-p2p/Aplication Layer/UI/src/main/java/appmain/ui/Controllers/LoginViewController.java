@@ -5,6 +5,9 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import appmain.ui.MainViewController;
 
+import controller.implementaciones.LoginController;
+import dto.implementacion.login.LoginRequestDto;
+
 public class LoginViewController {
 
     @FXML
@@ -16,22 +19,23 @@ public class LoginViewController {
     @FXML
     private Button backButton;
     @FXML
-    private Hyperlink registerLink;
-    @FXML
     private Hyperlink forgotPasswordLink;
 
     private MainViewController mainController;
+
+    private LoginController loginController;
 
     @FXML
     public void initialize() {
         // Configurar eventos para los botones y enlaces
         setupButtons();
+
+        loginController = new LoginController();
     }
 
     private void setupButtons() {
         loginButton.setOnAction(event -> handleLogin());
         backButton.setOnAction(event -> closeWindow());
-        registerLink.setOnAction(event -> openRegisterForm());
         forgotPasswordLink.setOnAction(event -> showForgotPasswordDialog());
     }
 
@@ -45,18 +49,17 @@ public class LoginViewController {
             return;
         }
 
-        // Simulación de autenticación exitosa
-        String username = email.split("@")[0]; // Por ejemplo, "usuario" de "usuario@gmail.com"
-        String fullName = "Nombre de Ejemplo";
+        //TODO: Probar con el servidor
+        LoginRequestDto loginRequestDto = new LoginRequestDto(email, password);
+        //loginController.loguearse(loginRequestDto);
+        System.out.println("He logueado: " + email);
 
-        mainController.onLoginSuccess(username, email, fullName);
+        //TODO: Extracción de datos del response, para continuar ???
+        String username = email.split("@")[0];
+
+        mainController.onLoginSuccess(username, email);
 
         closeWindow();
-    }
-
-    private void openRegisterForm() {
-        closeWindow();
-        mainController.openRegisterForm();
     }
 
     private void showForgotPasswordDialog() {
