@@ -7,6 +7,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import transport.TcpPersistentTransportStrategy;
+import transport.TransportContext;
+
 public class UniChatApplication extends Application {
 
     @Override
@@ -22,6 +25,8 @@ public class UniChatApplication extends Application {
     }
 
     public static void main(String[] args) {
+        TcpPersistentTransportStrategy estrategia = new TcpPersistentTransportStrategy("localhost", 9000); // Reemplaza con IP y puerto reales
+        TransportContext context = new TransportContext(estrategia);
         launch();
     }
 }

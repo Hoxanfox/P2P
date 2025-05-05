@@ -1,4 +1,4 @@
-package controller;
+package controller.implementaciones;
 
 import dto.implementacion.CreateChannel.CreateChannelRequestDto;
 import dto.implementacion.CreateChannel.CreateChannelResponseDto;

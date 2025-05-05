@@ -1,5 +1,6 @@
 package appmain.ui;
 
+import appmain.ui.Controllers.GroupViewController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -15,6 +16,8 @@ import appmain.ui.Controllers.RegisterViewController;
 
 import java.io.IOException;
 import java.util.Objects;
+
+import controller.implementaciones.RegisterController;
 
 public class MainViewController {
 
@@ -34,10 +37,12 @@ public class MainViewController {
     @FXML private Label usernameLabel;
     @FXML private Circle profilePic;
     @FXML private TextField searchField;
-    @FXML private Button addContactButton;
     @FXML private Button addGroupButton;
     @FXML private TextField messageField;
     @FXML private Button sendButton;
+    @FXML private Button attachButton;
+
+    private RegisterViewController registerViewController;
 
     // Variables para los datos del perfil y estado de autenticación
     private boolean isLogin = false; // Cambia a true cuando el usuario está logueado
@@ -48,6 +53,8 @@ public class MainViewController {
 
     @FXML
     public void initialize() {
+        registerViewController = new RegisterViewController();
+
         // Configurar la interfaz según el estado de autenticación
         updateAuthenticationState();
 
@@ -64,6 +71,7 @@ public class MainViewController {
         // Configurar el campo de mensaje y el botón de enviar
         setupChatControls();
     }
+
 
     private void updateAuthenticationState() {
         if (!isLogin) {
@@ -94,6 +102,9 @@ public class MainViewController {
     private void setupAuthButtons() {
         loginButton.setOnAction(event -> openLoginForm());
         registerButton.setOnAction(event -> openRegisterForm());
+        addGroupButton.setOnAction(event -> openNewGroupForm());
+        settingsButton.setOnAction(event -> openSettingsView());
+        attachButton.setOnAction(event -> openSubmitFile() );
     }
 
     private void setupProfileButton() {
@@ -156,7 +167,7 @@ public class MainViewController {
 
     private void openProfileForm() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/p2p/ui/Profile/profile-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/appmain/ui/Profile/profile-view.fxml"));
             Scene profileScene = new Scene(loader.load(), 500, 700);
 
             ProfileViewController controller = loader.getController();
@@ -173,11 +184,44 @@ public class MainViewController {
         }
     }
 
+    private void openNewGroupForm() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/appmain/ui/Registration/group-view.fxml"));
+            Scene groupScene = new Scene(loader.load(), 400, 500);
+
+            GroupViewController controller = loader.getController();
+            controller.setMainController(this);
+
+            Stage groupStage= new Stage();
+            groupStage.initStyle(StageStyle.UNDECORATED);
+            groupStage.initModality(Modality.APPLICATION_MODAL);
+            groupStage.setScene(groupScene);
+            groupStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void openSettingsView() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Configuración del usuario");
+        alert.setHeaderText(null);
+        alert.setContentText("Funcionalidad no implementada todavía.");
+        alert.showAndWait();
+    }
+
+    private void openSubmitFile() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Adjuntar documento");
+        alert.setHeaderText(null);
+        alert.setContentText("Funcionalidad no implementada todavía.");
+        alert.showAndWait();
+    }
+
     // Método llamado desde LoginViewController cuando el login es exitoso
-    public void onLoginSuccess(String username, String email, String fullName) {
+    public void onLoginSuccess(String username, String email) {
         this.username = username;
         this.email = email;
-        this.fullName = fullName;
         this.isLogin = true;
         updateAuthenticationState();
     }
@@ -191,6 +235,7 @@ public class MainViewController {
         usernameLabel.setText(username);
     }
 
+    //TODO: Implemeentar logica para traer los contactos reales
     private void loadSampleContacts() {
         // Este método cargará contactos de ejemplo en el sidebar
         // En una implementación real, estos vendrían de una base de datos o servicio
@@ -202,6 +247,7 @@ public class MainViewController {
         }
     }
 
+    //TODO: Implementar logica para traer los ejemplso reales
     private void loadSampleGroups() {
         // Este método cargará grupos de ejemplo en el sidebar
         // En una implementación real, estos vendrían de una base de datos o servicio

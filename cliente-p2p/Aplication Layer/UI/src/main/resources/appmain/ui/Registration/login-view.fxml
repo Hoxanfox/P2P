@@ -30,10 +30,6 @@
                 <Button fx:id="loginButton" alignment="CENTER" defaultButton="true" styleClass="auth-submit-button" text="Iniciar Sesión" textFill="#fffafa" />
             </HBox>
 
-            <HBox alignment="CENTER" spacing="10">
-                <Text fill="#eeeaea" styleClass="auth-text" text="¿No tienes una cuenta?" />
-                <Hyperlink fx:id="registerLink" styleClass="auth-link" text="Regístrate" />
-            </HBox>
         </VBox>
 
         <HBox alignment="CENTER_LEFT" styleClass="back-container">

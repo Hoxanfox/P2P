@@ -12,80 +12,65 @@ public class ProfileViewController {
     // Header
     @FXML private Button closeButton;
 
-    // Profile Picture Section
-    @FXML private Circle profileImage;
-    @FXML private Button changePicButton;
-    @FXML private Label fullNameLabel;
-    @FXML private Label userStatusLabel;
-
     // Personal Information Fields
     @FXML private TextField usernameField;
-    @FXML private TextField firstNameField;
-    @FXML private TextField lastNameField;
     @FXML private TextField emailField;
-    @FXML private ComboBox<String> statusComboBox;
-    @FXML private TextArea bioTextArea;
 
     // Account Settings Buttons
     @FXML private Button changePasswordButton;
-    @FXML private Button notificationsButton;
-    @FXML private Button privacyButton;
 
     // Footer Buttons
     @FXML private Button cancelButton;
+    @FXML private Button changePicButton;
     @FXML private Button saveButton;
 
     @FXML
     private void initialize() {
-        // Aquí puedes inicializar cosas como valores iniciales del ComboBox, listeners, etc.
-        statusComboBox.getItems().addAll("Disponible", "Ocupado", "Ausente");
         setupButtons();
     }
 
     private void setupButtons() {
         closeButton.setOnAction(event -> handleCloseButton());
-    }
-
-    // Puedes agregar métodos para manejar los eventos de los botones, por ejemplo:
-    @FXML
-    private void handleSaveButton() {
-        System.out.println("Guardar cambios:");
-        System.out.println("Nombre de usuario: " + usernameField.getText());
-        System.out.println("Nombre: " + firstNameField.getText());
-        System.out.println("Apellido: " + lastNameField.getText());
-        System.out.println("Email: " + emailField.getText());
-        System.out.println("Estado: " + statusComboBox.getValue());
-        System.out.println("Biografía: " + bioTextArea.getText());
-    }
-
-    private void handleCancelButton() {
-        System.out.println("Cancelar cambios");
+        cancelButton.setOnAction(event -> handleCloseButton());
+        changePasswordButton.setOnAction(event -> handleChangePasswordButton());
+        changePicButton.setOnAction(event -> handleChangePicButton());
+        saveButton.setOnAction(event -> handleSaveButton());
     }
 
     private void handleCloseButton() {
         // Obtiene el StackPane raíz
         Stage stage = (Stage) closeButton.getScene().getWindow();
         stage.close();
-
-
         System.out.println("Vista de perfil cerrada.");
+    }
+
+    private void handleChangePasswordButton(){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("ChangePassword");
+        alert.setHeaderText(null);
+        alert.setContentText("Funcionalidad no disponible");
+
+        alert.showAndWait();
+    }
+
+    private void handleSaveButton(){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Guardar información");
+        alert.setHeaderText(null);
+        alert.setContentText("Funcionalidad no disponible");
+
+        alert.showAndWait();
     }
 
 
     private void handleChangePicButton() {
-        System.out.println("Cambiar foto de perfil");
-    }
 
-    private void handleChangePasswordButton() {
-        System.out.println("Cambiar contraseña");
-    }
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Cambiar foto de perfil");
+        alert.setHeaderText(null);
+        alert.setContentText("Funcionalidad no disponible");
 
-    private void handleNotificationsButton() {
-        System.out.println("Configurar notificaciones");
-    }
-
-    private void handlePrivacyButton() {
-        System.out.println("Privacidad y seguridad");
+        alert.showAndWait();
     }
 
     public void setUserData(String username, String email, String fullName, String status) {
