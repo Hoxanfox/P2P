@@ -1,0 +1,61 @@
+
+import protocolo.implementaciones.register.RegisterRequest;
+import protocolo.implementaciones.register.RegisterResponse;
+import dto.implementacion.register.RegisterRequestDto;
+import dto.implementacion.register.RegisterResponseDto;
+import transport.TcpTransportStrategy;
+import transport.TransportContext;
+
+
+import java.time.LocalDate;
+import java.util.UUID;
+
+public class Main {
+    public static void main(String[] args) {
+        // 1. Preparar el DTO de request
+        RegisterRequestDto requestDto = new RegisterRequestDto(
+                "juan123",            // nombre → username
+                "juan@mail.com",      // email
+                "secreta123",         // password
+                "foto_base64",        // foto en Base64
+                "192.168.1.23"        // ip
+        );
+
+        // 2. Crear el objeto de la solicitud (Request) a partir del DTO
+        RegisterRequest registerRequest = new RegisterRequest(requestDto);
+
+        // 3. Contexto de transporte (ajusta host/puerto según tu servidor)
+        TransportContext context = new TransportContext(
+                new TcpTransportStrategy("localhost", 9000)
+        );
+
+        // 4. Enviar y recibir JSON
+        System.out.println("[DEBUG] Enviando solicitud de registro: " + registerRequest.toJson());
+        String jsonResponse = context.executeSend(registerRequest.toJson());
+
+        // 5. Procesar la respuesta
+        if (jsonResponse != null) {
+            RegisterResponse registerResponse = new RegisterResponse();
+            registerResponse.fromJson(jsonResponse);
+
+            System.out.println("[RESULTADO] Estado: " + registerResponse.getStatus());
+            System.out.println("[RESULTADO] Mensaje: " + registerResponse.getMessage());
+
+            // 6. Si fue success, obtenemos el DTO con los datos de data
+            if ("success".equals(registerResponse.getStatus())) {
+                RegisterResponseDto dto = registerResponse.getData();
+
+                // Mostrar valores directamente desde el DTO
+                System.out.println("[RESULTADO DTO] ID:            " + dto.getId());
+                System.out.println("[RESULTADO DTO] Nombre:        " + dto.getNombre());
+                System.out.println("[RESULTADO DTO] Email:         " + dto.getEmail());
+                System.out.println("[RESULTADO DTO] Password:      " + dto.getPassword());
+                System.out.println("[RESULTADO DTO] Foto(bytes):   " + (dto.getFoto() != null ? dto.getFoto().length + " bytes" : "null"));
+                System.out.println("[RESULTADO DTO] IP:            " + dto.getIp());
+                System.out.println("[RESULTADO DTO] Estado:        " + dto.isEstado());
+            }
+        } else {
+            System.out.println("[ERROR] No se recibió respuesta del servidor.");
+        }
+    }
+}

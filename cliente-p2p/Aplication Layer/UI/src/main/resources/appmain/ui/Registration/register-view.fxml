@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane styleClass="auth-container" stylesheets="@CSS/auth-style.css,@../CSS/colors.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.12" fx:controller="appmain.ui.Controllers.RegisterViewController">
+
+    <VBox alignment="CENTER" spacing="20" styleClass="auth-box">
+        <Circle radius="30" styleClass="auth-logo" />
+        <Text styleClass="auth-title" text="Crear una cuenta" />
+
+        <VBox spacing="15" styleClass="form-container">
+            <VBox spacing="5">
+                <Label styleClass="form-label" text="Nombre de usuario" />
+                <TextField fx:id="usernameField" promptText="nombre_usuario" styleClass="form-field" />
+            </VBox>
+
+            <VBox spacing="5">
+                <Label styleClass="form-label" text="Correo electrónico" />
+                <TextField fx:id="emailField" promptText="tu.correo@universidad.edu" styleClass="form-field" />
+            </VBox>
+
+            <VBox spacing="5">
+                <Label styleClass="form-label" text="Contraseña" />
+                <PasswordField fx:id="passwordField" promptText="Mínimo 8 caracteres" styleClass="form-field" />
+            </VBox>
+
+            <VBox spacing="5">
+                <Label styleClass="form-label" text="Confirmar contraseña" />
+                <PasswordField fx:id="confirmPasswordField" promptText="Confirma tu contraseña" styleClass="form-field" />
+            </VBox>
+
+            <CheckBox fx:id="termsCheckbox" styleClass="terms-checkbox" text="Acepto los términos y condiciones" />
+
+            <HBox alignment="CENTER">
+                <Button fx:id="registerButton" defaultButton="true" styleClass="auth-submit-button" text="Registrarse" textFill="#fcfcfc" />
+            </HBox>
+
+        </VBox>
+
+        <HBox alignment="CENTER_LEFT" styleClass="back-container">
+            <Button fx:id="backButton" styleClass="back-button" text="Volver">
+                <graphic>
+                    <Region styleClass="back-icon" />
+                </graphic>
+            </Button>
+        </HBox>
+    </VBox>
+</StackPane>

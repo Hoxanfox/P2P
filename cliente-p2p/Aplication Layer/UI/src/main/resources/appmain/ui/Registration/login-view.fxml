@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane styleClass="auth-container" stylesheets="@CSS/auth-style.css,@../CSS/colors.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="appmain.ui.Controllers.LoginViewController">
+
+    <VBox alignment="CENTER" spacing="20" styleClass="auth-box">
+        <Circle radius="30" styleClass="auth-logo" />
+        <Text styleClass="auth-title" text="Iniciar Sesión" />
+
+        <VBox spacing="15" styleClass="form-container">
+            <VBox spacing="5">
+                <Label styleClass="form-label" text="Correo electrónico" />
+                <TextField fx:id="emailField" promptText="tu.correo@universidad.edu" styleClass="form-field" />
+            </VBox>
+
+            <VBox spacing="5">
+                <Label styleClass="form-label" text="Contraseña" />
+                <PasswordField fx:id="passwordField" promptText="Contraseña" styleClass="form-field" />
+            </VBox>
+
+            <HBox alignment="CENTER">
+                <Hyperlink fx:id="forgotPasswordLink" styleClass="auth-link" text="¿Olvidaste tu contraseña?" />
+            </HBox>
+
+            <HBox alignment="CENTER">
+                <Button fx:id="loginButton" alignment="CENTER" defaultButton="true" styleClass="auth-submit-button" text="Iniciar Sesión" textFill="#fffafa" />
+            </HBox>
+
+        </VBox>
+
+        <HBox alignment="CENTER_LEFT" styleClass="back-container">
+            <Button fx:id="backButton" styleClass="back-button" text="Volver">
+                <graphic>
+                    <Region styleClass="back-icon" />
+                </graphic>
+            </Button>
+        </HBox>
+    </VBox>
+</StackPane>

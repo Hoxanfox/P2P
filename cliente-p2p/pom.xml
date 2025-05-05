@@ -16,8 +16,12 @@
         <module>Aplication Layer/Dto</module>
         <module>Domain Layer/Facade</module>
         <module>Aplication Layer/Contoller</module>
+<<<<<<< HEAD
         <module>Aplication Layer/Views</module>
         <module>Infrastructure Layer/Factory</module>
+=======
+        <module>Aplication Layer/UI</module>
+>>>>>>> refs/remotes/origin/main
     </modules>
 
     <properties>

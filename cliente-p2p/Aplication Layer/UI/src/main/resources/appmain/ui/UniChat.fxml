@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane fx:id="mainContainer" stylesheets="@CSS/main-style.css,@CSS/colors.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.12" fx:controller="appmain.ui.MainViewController">
+
+    <!-- Área superior con información de perfil y controles de la aplicación -->
+    <top>
+        <HBox styleClass="top-bar">
+            <HBox styleClass="app-title-container">
+                <Text styleClass="app-title" text="UniChat" />
+            </HBox>
+            <HBox alignment="CENTER_RIGHT" styleClass="profile-container" HBox.hgrow="ALWAYS">
+                <Button fx:id="settingsButton" text="Configuración" styleClass="icon-button">
+                    <graphic>
+                        <Region styleClass="settings-icon" />
+                    </graphic>
+                </Button>
+                <Button fx:id="profileButton" styleClass="profile-button">
+                    <graphic>
+                        <HBox alignment="CENTER" spacing="10">
+                            <Circle fx:id="profilePic" radius="15" styleClass="profile-pic" />
+                            <Label fx:id="usernameLabel" styleClass="username-label" text="Usuario" />
+                        </HBox>
+                    </graphic>
+                </Button>
+            </HBox>
+        </HBox>
+    </top>
+
+    <!-- Barra lateral izquierda con contactos y grupos -->
+    <left>
+        <VBox fx:id="sidebarContainer" styleClass="sidebar">
+            <HBox styleClass="search-container">
+                <TextField fx:id="searchField" promptText="Buscar..." styleClass="search-field" HBox.hgrow="ALWAYS" />
+            </HBox>
+
+            <TabPane fx:id="contactsTabPane" styleClass="contacts-tab-pane" VBox.vgrow="ALWAYS">
+                <Tab closable="false" styleClass="tab" text="Contactos">
+                    <VBox styleClass="full-height">
+                        <HBox styleClass="section-header">
+                            <Label styleClass="section-title" text="Contactos" />
+                            <Region HBox.hgrow="ALWAYS" />
+                        </HBox>
+                        <ScrollPane VBox.vgrow="ALWAYS" fitToWidth="true" styleClass="contacts-scroll">
+                            <VBox fx:id="contactsContainer" styleClass="contacts-container" />
+                        </ScrollPane>
+                    </VBox>
+                </Tab>
+                <Tab closable="false" text="Grupos">
+                    <VBox styleClass="full-height">
+                        <HBox styleClass="section-header">
+                            <Label styleClass="section-title" text="Grupos" />
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Button fx:id="addGroupButton" styleClass="icon-button" text="Crear grupo" textFill="#e4e3e3">
+                                <graphic>
+                                    <Region styleClass="add-icon" />
+                                </graphic>
+                            </Button>
+                        </HBox>
+                        <ScrollPane VBox.vgrow="ALWAYS" fitToWidth="true" styleClass="contacts-scroll">
+                            <VBox fx:id="groupsContainer" styleClass="contacts-container" />
+                        </ScrollPane>
+                    </VBox>
+                </Tab>
+            </TabPane>
+        </VBox>
+    </left>
+
+    <!-- Área central para los chats -->
+    <center>
+        <StackPane fx:id="contentArea">
+            <!-- Pantalla de bienvenida cuando no hay chat seleccionado -->
+            <VBox fx:id="welcomeScreen" alignment="CENTER" spacing="20" styleClass="welcome-screen">
+                <Circle radius="40" styleClass="welcome-logo" />
+                <Text styleClass="welcome-title" text="Bienvenido a UniChat" />
+                <Text styleClass="welcome-subtitle" text="Selecciona un contacto o grupo para iniciar una conversación" textAlignment="CENTER" />
+            </VBox>
+
+            <!-- Pantalla de chat (inicialmente oculta) -->
+            <BorderPane fx:id="chatScreen" visible="false">
+                <top>
+                    <HBox fx:id="chatHeader" styleClass="chat-header">
+                        <Circle fx:id="chatProfilePic" radius="20" styleClass="profile-pic" />
+                        <VBox>
+                            <Label fx:id="chatNameLabel" styleClass="chat-name" text="Nombre del contacto" />
+                            <Label fx:id="chatStatusLabel" styleClass="chat-status" text="En línea" />
+                        </VBox>
+                    </HBox>
+                </top>
+                <center>
+                    <ScrollPane fx:id="messagesScrollPane" fitToWidth="true" styleClass="messages-scroll">
+                        <VBox fx:id="messagesContainer" styleClass="messages-container" />
+                    </ScrollPane>
+                </center>
+                <bottom>
+                    <HBox styleClass="message-input-container">
+                        <Button fx:id="attachButton" text="Agregar documento" styleClass="icon-button">
+                            <graphic>
+                                <Region styleClass="attach-icon" />
+                            </graphic>
+                        </Button>
+                        <TextField fx:id="messageField" promptText="Escribe un mensaje..." styleClass="message-field" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="sendButton" text="Enviar" styleClass="send-button">
+                        </Button>
+                    </HBox>
+                </bottom>
+            </BorderPane>
+
+            <!-- Pantalla de login (inicialmente oculta, se muestra si isLogin=false) -->
+            <VBox fx:id="loginScreen" alignment="CENTER" spacing="30" styleClass="login-screen" visible="false">
+                <Text styleClass="login-title" text="UniChat" />
+                <Text styleClass="login-subtitle" text="Conéctate con tus compañeros universitarios" textAlignment="CENTER" />
+                <HBox alignment="CENTER" spacing="20">
+                    <Button fx:id="loginButton" styleClass="auth-button" text="Iniciar Sesión" />
+                    <Button fx:id="registerButton" styleClass="auth-button, register-button" text="Registrarse" />
+                </HBox>
+            </VBox>
+        </StackPane>
+    </center>
+</BorderPane>
