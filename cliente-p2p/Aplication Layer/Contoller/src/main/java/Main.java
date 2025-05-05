@@ -10,32 +10,35 @@ import java.util.UUID;
 
 public class Main {
     public static void main(String[] args) {
+        TcpPersistentTransportStrategy estrategia = null;
+
         try {
             System.out.println("[DEBUG] Iniciando flujo de prueba...");
 
-            // Crear la estrategia de transporte TCP persistente
-            TcpPersistentTransportStrategy estrategia = new TcpPersistentTransportStrategy("localhost", 9000); // Reemplaza con IP y puerto reales
+            // Crear estrategia de transporte
+            estrategia = new TcpPersistentTransportStrategy("localhost", 9000);
             TransportContext context = new TransportContext(estrategia);
 
-            String emailAna = "ana.torres@correo.com";
-            String emailLuis = "luis.mendoza@correo.com";
+            // Crear los datos del mensaje
+            String emailAna = "juan@example.com";
+            String emailLuis = "juan@example.es";
 
-            System.out.println("[DEBUG] Enviando mensaje desde " + emailAna + " a " + emailLuis + "...");
-
-            SendMessageUserRequestDto mensaje = new SendMessageUserRequestDto();
-            mensaje.setMensaje(new MensajeRequestDto());
-
-            UUID remitenteId = UUID.fromString("210c3aea-d243-4b6c-8456-7bb67ff5306e");
-            UUID destinatarioId = UUID.fromString("0db20b34-00a6-48d0-8ebb-49de460a99a4");
+            UUID remitenteId = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
+            UUID destinatarioId = UUID.fromString("0fd3d585-4144-476f-b4ff-d4cf643671d7");
 
             RemitenteMessageDto remitente = new RemitenteMessageDto(remitenteId, emailAna);
             DestinatarioMessageDto destinatario = new DestinatarioMessageDto(destinatarioId, emailLuis);
 
-            mensaje.getMensaje().setRemitente(remitente);
-            mensaje.getMensaje().setDestinatario(destinatario);
-            mensaje.getMensaje().setContenido("Hola Luis, ¿cómo estás?");
-            mensaje.getMensaje().setArchivo(null);
+            MensajeRequestDto mensajeDto = new MensajeRequestDto();
+            mensajeDto.setRemitente(remitente);
+            mensajeDto.setDestinatario(destinatario);
+            mensajeDto.setContenido("Hola Luis, ¿cómo estás?");
+            mensajeDto.setArchivo(null); // Si no hay archivo, puede ir null
 
+            SendMessageUserRequestDto mensaje = new SendMessageUserRequestDto();
+            mensaje.setMensaje(mensajeDto);
+
+            // Enviar el mensaje
             SendMessageUserController mensajeController = new SendMessageUserController(context);
             mensajeController.enviarMensaje(mensaje);
 
@@ -44,6 +47,12 @@ public class Main {
         } catch (Exception e) {
             System.err.println("[ERROR GENERAL] " + e.getMessage());
             e.printStackTrace();
+        } finally {
+            // Cerrar la conexión TCP
+            if (estrategia != null) {
+                estrategia.close();
+                System.out.println("[DEBUG] Estrategia de transporte cerrada correctamente.");
+            }
         }
     }
 }

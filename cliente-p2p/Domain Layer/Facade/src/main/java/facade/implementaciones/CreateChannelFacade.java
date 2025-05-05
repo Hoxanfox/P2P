@@ -66,4 +66,8 @@ public class CreateChannelFacade implements IChannelFacade {
 
         return result;
     }
+    public TransportContext getContext() {
+        return this.transportContext;
+    }
+
 }

@@ -16,4 +16,13 @@ public class TransportContext {
     public String executeSend(String jsonToSend) {
         return strategy.sendJson(jsonToSend);
     }
+
+    // Método para recibir mensajes
+    public String executeReceive() {
+        return strategy.receiveJson();  // Llamamos a un método que implementa la estrategia de recepción
+    }
+
+    public ITransportStrategy getStrategy() {
+        return strategy;
+    }
 }

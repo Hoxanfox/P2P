@@ -4,173 +4,240 @@ import (
 	"encoding/json"
 	"fmt"
 	"net"
+	"time"
+
+	"github.com/google/uuid"
 )
 
+// Estructura general del mensaje recibido
 type Message struct {
 	Command string          `json:"command"`
 	Data    json.RawMessage `json:"data"`
 }
 
-// Estructuras de datos
+// Estructura del usuario
 type User struct {
-	ID     string
-	Email  string
-	Nombre string
+	ID          string `json:"id"`
+	Email       string `json:"email"`
+	Nombre      string `json:"nombre"`
+	Password    string `json:"password"`
+	Foto        string `json:"foto"`
+	IP          string `json:"ip"`
+	CreatedAt   string `json:"created_at"`
+	IsConnected bool   `json:"is_connected"`
 }
 
-type File struct {
-	ID     int    `json:"id"`
-	Nombre string `json:"nombre"`
+// Solicitudes
+type RegisterRequest struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+	Nombre   string `json:"nombre"`
 }
 
-type Member struct {
-	ID     string `json:"id"`
-	Nombre string `json:"nombre"`
+type LoginRequest struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
-type Chat struct {
-	ID         int      `json:"id"`
-	Tipo       string   `json:"tipo"`
-	Miembros   []Member `json:"miembros"`
-	TipoChatID string      `json:"tipoChatId"`
-}
-
-type MessageData struct {
-	Mensaje struct {
-		Remitente struct {
-			ID     string `json:"id"`
-			Nombre string `json:"correo"` // se llama 'correo' en el JSON de entrada
-		} `json:"remitente"`
-		Destinatario struct {
-			ID     string `json:"id"`
-			Nombre string `json:"correo"` // se llama 'correo' en el JSON de entrada
-		} `json:"destinatario"`
-		Contenido  string `json:"contenido"`
-		FechaEnvio string `json:"fechaEnvio"`
-		Archivo    *File  `json:"archivo"`
-	} `json:"mensaje"`
-}
-
-type MessageResponse struct {
-	ID           string     `json:"id"`
-	Remitente    Member  `json:"remitente"`
-	Destinatario Member  `json:"destinatario"`
-	Contenido    string  `json:"contenido"`
-	FechaEnvio   string  `json:"fechaEnvio"`
-	Archivo      *File   `json:"archivo"`
-	Chat         Chat    `json:"chat"`
-}
-
+// Estructura de respuesta
 type GenericResponse struct {
 	Status  string      `json:"status"`
 	Message string      `json:"message"`
 	Data    interface{} `json:"data,omitempty"`
 }
 
-// Usuarios disponibles
+// Usuarios simulados (iniciales)
 var users = []User{
 	{
-		ID:     "210c3aea-d243-4b6c-8456-7bb67ff5306e",
-		Email:  "ana.torres@correo.com",
-		Nombre: "Ana Torres",
+		ID:          uuid.New().String(),
+		Email:       "juan@example.com",
+		Nombre:      "juan123",
+		Password:    "1234",
+		Foto:        "No disponible",
+		IP:          "127.0.0.1",
+		CreatedAt:   "2025-04-28T10:30:00",
+		IsConnected: true,
 	},
 	{
-		ID:     "0db20b34-00a6-48d0-8ebb-49de460a99a4",
-		Email:  "luis.mendoza@correo.com",
-		Nombre: "Luis Mendoza",
+		ID:          uuid.New().String(),
+		Email:       "ana@example.com",
+		Nombre:      "ana456",
+		Password:    "5678",
+		Foto:        "No disponible",
+		IP:          "127.0.0.2",
+		CreatedAt:   "2025-04-28T11:00:00",
+		IsConnected: false,
 	},
 }
 
-// Envío de respuesta
+// Enviar respuestas al cliente
 func sendResponse(conn net.Conn, response GenericResponse) {
-	respBytes, _ := json.Marshal(response)
+	respBytes, err := json.Marshal(response)
+	if err != nil {
+		fmt.Println("[ERROR] Marshal response:", err)
+		return
+	}
 	conn.Write(append(respBytes, '\n'))
+	fmt.Printf("[DEBUG] Enviado respuesta: %v\n", response) // Debug: respuesta enviada
 }
 
-// Ruta: send-message-user
-func handleSendMessageUser(conn net.Conn, msg Message) {
-	var request MessageData
+// Manejador de login
+func handleLogin(conn net.Conn, msg Message) {
+	var request LoginRequest
 	if err := json.Unmarshal(msg.Data, &request); err != nil {
-		sendResponse(conn, GenericResponse{"error", "Datos inválidos del mensaje", nil})
+		fmt.Println("[DEBUG] Error al deserializar mensaje de login:", err)
+		sendResponse(conn, GenericResponse{"error", "Datos inválidos de login", nil})
 		return
 	}
 
-	remitenteEmail := request.Mensaje.Remitente.Nombre
-	destinatarioEmail := request.Mensaje.Destinatario.Nombre
-
-	var remitente *User
-	var destinatario *User
-
+	var user *User
 	for i := range users {
-		if users[i].Email == remitenteEmail {
-			remitente = &users[i]
-		}
-		if users[i].Email == destinatarioEmail {
-			destinatario = &users[i]
+		if users[i].Email == request.Email && users[i].Password == request.Password {
+			user = &users[i]
+			break
 		}
 	}
 
-	if remitente == nil || destinatario == nil {
-		sendResponse(conn, GenericResponse{"error", "No se pudo enviar el mensaje. Verifique los datos del usuario o del chat.", nil})
+	if user == nil {
+		fmt.Println("[DEBUG] Usuario no encontrado o credenciales incorrectas")
+		sendResponse(conn, GenericResponse{"error", "Email o contraseña incorrectos", nil})
 		return
 	}
 
-	response := MessageResponse{
-		ID: "210c3aea-d243-4b6c-8456-7bb67ff5306e",
-		Remitente: Member{
-			ID:     remitente.ID,
-			Nombre: remitente.Nombre,
-		},
-		Destinatario: Member{
-			ID:     destinatario.ID,
-			Nombre: destinatario.Nombre,
-		},
-		Contenido:  request.Mensaje.Contenido,
-		FechaEnvio: request.Mensaje.FechaEnvio,
-		Archivo:    request.Mensaje.Archivo,
-		Chat: Chat{
-			ID:   7,
-			Tipo: "privado",
-			Miembros: []Member{
-				{ID: remitente.ID, Nombre: remitente.Nombre},
-				{ID: destinatario.ID, Nombre: destinatario.Nombre},
-			},
-			TipoChatID: "210c3aea-d243-4b6c-8456-7bb67ff5306e",
-		},
-	}
-
+	fmt.Printf("[DEBUG] Usuario encontrado: %v\n", user) // Debug: usuario encontrado
 	sendResponse(conn, GenericResponse{
 		Status:  "success",
-		Message: "Mensaje enviado correctamente",
-		Data:    response,
+		Message: "Inicio de sesión exitoso",
+		Data: map[string]interface{}{
+			"id":           user.ID,
+			"nombre":       user.Nombre,
+			"email":        user.Email,
+			"photo":        user.Foto,
+			"ip":           user.IP,
+			"created_at":   user.CreatedAt,
+			"is_connected": user.IsConnected,
+		},
 	})
 }
 
-// Manejo de comandos
+// Manejador de registro
+func handleRegister(conn net.Conn, msg Message) {
+	var request RegisterRequest
+	if err := json.Unmarshal(msg.Data, &request); err != nil {
+		fmt.Println("[DEBUG] Error al deserializar mensaje de registro:", err)
+		sendResponse(conn, GenericResponse{"error", "Datos inválidos de registro", nil})
+		return
+	}
+
+	// Verifica email duplicado
+	for _, user := range users {
+		if user.Email == request.Email {
+			fmt.Println("[DEBUG] Email duplicado detectado:", request.Email)
+			sendResponse(conn, GenericResponse{"error", "El email ya está registrado", nil})
+			return
+		}
+	}
+
+	// Crear nuevo usuario
+	newUser := User{
+		ID:          uuid.New().String(),
+		Email:       request.Email,
+		Nombre:      request.Nombre,
+		Password:    request.Password,
+		Foto:        "No disponible",
+		IP:          "127.0.0.1", // podrías obtenerla desde conn.RemoteAddr()
+		CreatedAt:   time.Now().Format(time.RFC3339),
+		IsConnected: false,
+	}
+	users = append(users, newUser)
+
+	fmt.Printf("[DEBUG] Usuario registrado: %v\n", newUser) // Debug: nuevo usuario registrado
+
+	sendResponse(conn, GenericResponse{
+		Status:  "success",
+		Message: "Registro exitoso",
+		Data: map[string]interface{}{
+			"id":           newUser.ID,
+			"nombre":       newUser.Nombre,
+			"email":        newUser.Email,
+			"photo":        newUser.Foto,
+			"ip":           newUser.IP,
+			"created_at":   newUser.CreatedAt,
+			"is_connected": newUser.IsConnected,
+		},
+	})
+}
+
+func handleListUsers(conn net.Conn) {
+    // Si no hay usuarios, enviar error
+	if len(users) == 0 {
+		sendResponse(conn, GenericResponse{
+			Status:  "error",
+			Message: "No se pudieron obtener los usuarios registrados",
+			Data:    nil,
+		})
+		return
+	}
+
+    // Si hay usuarios, construir la lista de usuarios
+	var userList []map[string]interface{}
+	for _, user := range users {
+		userList = append(userList, map[string]interface{}{
+			"id":           user.ID,
+			"nombre":       user.Nombre,
+			"email":        user.Email,
+			"is_connected": user.IsConnected,
+		})
+	}
+
+    // Enviar la respuesta con la lista de usuarios
+	sendResponse(conn, GenericResponse{
+		Status:  "success",
+		Message: "Usuarios registrados obtenidos correctamente",
+		Data:    userList,
+	})
+}
+
+
+// Manejador de conexión
 func handleConnection(conn net.Conn) {
 	defer conn.Close()
 
-	var buffer = make([]byte, 4096)
-	n, err := conn.Read(buffer)
-	if err != nil {
-		fmt.Println("[ERROR] No se pudo leer la conexión:", err)
-		return
-	}
+	fmt.Println("[DEBUG] Nueva conexión aceptada desde:", conn.RemoteAddr())
 
-	var msg Message
-	if err := json.Unmarshal(buffer[:n], &msg); err != nil {
-		sendResponse(conn, GenericResponse{"error", "Formato de mensaje inválido", nil})
-		return
-	}
+	// Loop para seguir esperando comandos hasta que la conexión se cierre
+	for {
+		buffer := make([]byte, 4096)
+		n, err := conn.Read(buffer)
+		if err != nil {
+			fmt.Println("[ERROR] No se pudo leer la conexión:", err)
+			return
+		}
 
-	if msg.Command == "send-message-user" {
-		handleSendMessageUser(conn, msg)
-	} else {
-		sendResponse(conn, GenericResponse{"error", "Comando no reconocido", nil})
+		var msg Message
+		if err := json.Unmarshal(buffer[:n], &msg); err != nil {
+			fmt.Println("[DEBUG] Error al deserializar mensaje:", err)
+			sendResponse(conn, GenericResponse{"error", "Formato de mensaje inválido", nil})
+			return
+		}
+
+		fmt.Printf("[DEBUG] Mensaje recibido: %v\n", msg) // Debug: mensaje recibido
+
+		switch msg.Command {
+		case "login":
+			handleLogin(conn, msg)
+		case "register":
+			handleRegister(conn, msg)
+		case "list-users":
+			handleListUsers(conn)
+		default:
+			fmt.Println("[DEBUG] Comando no reconocido:", msg.Command)
+			sendResponse(conn, GenericResponse{"error", "Comando no reconocido", nil})
+		}
 	}
 }
 
-// Servidor principal
+// Función principal del servidor
 func main() {
 	listener, err := net.Listen("tcp", ":9000")
 	if err != nil {

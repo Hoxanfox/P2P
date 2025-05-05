@@ -1,10 +1,16 @@
 package dto.implementacion.SendMessageUser.Response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.UUID;
 
 public class MiembroChatDto {
     private UUID id;
+
+    @JsonProperty("correo")  // Mapea el campo "correo" del JSON a "email" en la clase
     private String email;
+
+    public MiembroChatDto () {
+    }
 
     // Getter para 'id'
     public UUID getId() {

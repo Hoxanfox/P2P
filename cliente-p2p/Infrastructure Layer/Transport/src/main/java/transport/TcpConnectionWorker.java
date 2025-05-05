@@ -1,75 +1,63 @@
 package transport;
 
 import java.io.*;
-import java.net.Socket;
+import java.net.*;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 public class TcpConnectionWorker extends Thread {
 
     private final String host;
     private final int port;
-
-    private Socket socket;
-    private BufferedReader in;
-    private PrintWriter out;
+    private final BlockingQueue<String> outgoingQueue;
+    private final BlockingQueue<String> incomingQueue;
     private volatile boolean running = true;
+    private Socket socket;
+    private PrintWriter writer;
+    private BufferedReader reader;
 
-    private final BlockingQueue<String> outgoingMessages;
-    private final BlockingQueue<String> incomingResponses;
-
-    public TcpConnectionWorker(String host, int port,
-                               BlockingQueue<String> outgoingMessages,
-                               BlockingQueue<String> incomingResponses) {
+    public TcpConnectionWorker(String host, int port, BlockingQueue<String> outgoingQueue, BlockingQueue<String> incomingQueue) {
         this.host = host;
         this.port = port;
-        this.outgoingMessages = outgoingMessages;
-        this.incomingResponses = incomingResponses;
+        this.outgoingQueue = outgoingQueue;
+        this.incomingQueue = incomingQueue;
     }
 
     @Override
     public void run() {
         try {
             socket = new Socket(host, port);
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new PrintWriter(socket.getOutputStream(), true);
-            System.out.println("[INFO] Conexión establecida con " + host + ":" + port);
+            writer = new PrintWriter(socket.getOutputStream(), true);
+            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-            while (running && !socket.isClosed()) {
-
-                // Si hay mensajes para enviar
-                String message = outgoingMessages.poll();
-                if (message != null) {
-                    out.println(message);
-                    out.flush();
-                    System.out.println("[DEBUG] Enviado: " + message);
-                }
-
-                // Si hay mensajes recibidos
-                if (in.ready()) {
-                    String response = in.readLine();
-                    if (response != null) {
-                        System.out.println("[DEBUG] Recibido: " + response);
-                        incomingResponses.offer(response);
+            // Hilo para escuchar mensajes entrantes
+            new Thread(() -> {
+                try {
+                    String line;
+                    while (running && (line = reader.readLine()) != null) {
+                        incomingQueue.offer(line);  // Colocamos los mensajes entrantes en la cola
                     }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
+            }).start();
 
-                Thread.sleep(100); // evitar uso excesivo de CPU
+            // Hilo para enviar mensajes
+            while (running) {
+                String message = outgoingQueue.take();  // Tomamos los mensajes de la cola de salida
+                writer.println(message);
             }
 
-        } catch (Exception e) {
-            System.err.println("[ERROR] Hilo de conexión TCP: " + e.getMessage());
-        } finally {
-            try {
-                if (socket != null) socket.close();
-                System.out.println("[INFO] Conexión cerrada.");
-            } catch (IOException e) {
-                System.err.println("[ERROR] Al cerrar socket: " + e.getMessage());
-            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
     public void stopRunning() {
-        this.running = false;
+        running = false;
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

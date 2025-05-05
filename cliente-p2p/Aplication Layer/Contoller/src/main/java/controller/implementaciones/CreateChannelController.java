@@ -1,4 +1,4 @@
-package controller;
+package controller.implementaciones;
 
 import dto.implementacion.CreateChannel.CreateChannelRequestDto;
 import dto.implementacion.CreateChannel.CreateChannelResponseDto;
@@ -10,19 +10,20 @@ import java.sql.SQLException;
 public class CreateChannelController {
 
     private final CreateChannelFacade channelFacade;
+    private final CreateChannelRequestDto requestDto;
 
-    public CreateChannelController(TransportContext context) {
+    public CreateChannelController(TransportContext context, CreateChannelRequestDto requestDto) {
         this.channelFacade = new CreateChannelFacade(context);
+        this.requestDto = requestDto;
         System.out.println("[DEBUG] CreateChannelController inicializado.");
     }
 
     /**
      * Ejecuta el flujo completo: obtiene datos del servidor y los guarda en la base de datos.
      *
-     * @param requestDto Objeto con los datos necesarios para crear el canal.
      * @return DTO con la respuesta procesada o null si ocurre un error.
      */
-    public CreateChannelResponseDto crearCanal(CreateChannelRequestDto requestDto) {
+    public CreateChannelResponseDto crearCanal() {
         System.out.println("[DEBUG] Iniciando creación de canal desde el controlador...");
 
         try {

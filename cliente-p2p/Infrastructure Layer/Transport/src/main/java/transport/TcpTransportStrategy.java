@@ -42,4 +42,9 @@ import transport.interfaces.ITransportStrategy;
             return null;
         }
     }
-}
+
+        @Override
+        public String receiveJson() {
+            return "";
+        }
+    }

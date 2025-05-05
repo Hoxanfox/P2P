@@ -30,6 +30,17 @@ public class TcpPersistentTransportStrategy implements ITransportStrategy {
         }
     }
 
+    // Método para recibir mensajes
+    public String receiveJson() {
+        try {
+            // Esperamos un mensaje entrante de la cola de mensajes
+            return incomingQueue.take();  // Bloqueante hasta que un mensaje esté disponible
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return "[ERROR] Interrumpido mientras esperaba mensaje entrante.";
+        }
+    }
+
     public void close() {
         if (worker != null) {
             worker.stopRunning();

@@ -5,23 +5,24 @@ import dto.implementacion.login.LoginResponseDto;
 import facade.interfaces.ILoginFacade;
 import protocolo.implementaciones.login.LoginRequest;
 import protocolo.implementaciones.login.LoginResponse;
-import transport.TcpPersistentTransportStrategy;
 import transport.TransportContext;
 import transport.interfaces.ITransportStrategy;
 
 public class LoginFacade implements ILoginFacade {
 
-    private final ITransportStrategy strategy;
     private final TransportContext context;
+    private LoginRequestDto requestDto = new LoginRequestDto();
+    private LoginResponseDto responseDto = new LoginResponseDto();
 
-    public LoginFacade(ITransportStrategy strategy) {
-        this.strategy = strategy;
-        this.context = new TransportContext(strategy);
-        log("[INFO] LoginFacade creado con estrategia de transporte: " + strategy.getClass().getSimpleName());
+    public LoginFacade(TransportContext context) {
+        this.context = context;
+        log("[INFO] LoginFacade creado con contexto de transporte usando estrategia: "
+                + context.getStrategy().getClass().getSimpleName());
     }
 
     @Override
     public boolean validarRequest(LoginRequestDto requestDto) {
+        this.requestDto = requestDto;
         if (requestDto == null) {
             log("[ERROR] El objeto LoginRequestDto es nulo");
             return false;
@@ -63,7 +64,8 @@ public class LoginFacade implements ILoginFacade {
     public void cerrarConexion() {
         log("[INFO] Intentando cerrar conexión...");
 
-        if (strategy instanceof TcpPersistentTransportStrategy tcp) {
+        ITransportStrategy strategy = context.getStrategy();
+        if (strategy instanceof transport.TcpPersistentTransportStrategy tcp) {
             tcp.close();
             log("[INFO] Conexión cerrada correctamente.");
         } else {
@@ -99,12 +101,21 @@ public class LoginFacade implements ILoginFacade {
             cerrarConexion();
             return null;
         }
-
+        this.responseDto = response.toDto(); // Aquí se guarda correctamente
         log("[INFO] Login exitoso. Conexión válida.");
         return context;
+
     }
 
     private void log(String mensaje) {
         System.out.println(mensaje);
     }
+    public LoginResponseDto getResponseDto() {
+        return responseDto;
+    }
+
+    public void setResponseDto(LoginResponseDto responseDto) {
+        this.responseDto = responseDto;
+    }
+
 }

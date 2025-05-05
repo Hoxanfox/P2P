@@ -6,7 +6,9 @@ public class DestinatarioMessageDto {
     private UUID id;
     private String correo;
 
+    public DestinatarioMessageDto (){
 
+    }
     public DestinatarioMessageDto(UUID id, String correo) {
         this.id = id;
         this.correo = correo;
