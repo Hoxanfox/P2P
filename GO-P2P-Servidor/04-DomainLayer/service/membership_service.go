@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/google/uuid"
+	"model"
 )
 
 // MembershipService define las operaciones para la gestión de membresías en canales
@@ -13,5 +14,5 @@ type MembershipService interface {
 	LeaveChannel(userID, channelID uuid.UUID) error
 	
 	// ListMembers obtiene todos los miembros de un canal
-	ListMembers(channelID uuid.UUID) ([]UsuarioDTO, error)
+	ListMembers(channelID uuid.UUID) ([]*model.UsuarioServidor, error)
 }

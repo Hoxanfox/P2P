@@ -11,5 +11,6 @@ replace (
 
 require (
 	github.com/google/uuid v1.6.0
+	github.com/stretchr/testify v1.8.4
 	model v0.0.0-00010101000000-000000000000
 )

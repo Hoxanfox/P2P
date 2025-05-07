@@ -12,11 +12,11 @@ type ChannelService interface {
 		nombre, descripcion string,
 		tipo model.CanalTipo,
 		miembrosIniciales []uuid.UUID,
-	) (*ChannelDTO, error)
+	) (*model.CanalServidor, error)
 
 	// ListAll lista todos los canales a los que pertenece un usuario
-	ListAll(userID uuid.UUID) ([]ChannelDTO, error)
+	ListAll(userID uuid.UUID) ([]*model.CanalServidor, error)
 	
 	// GetByID obtiene un canal por su ID
-	GetByID(channelID uuid.UUID) (*ChannelDTO, error)
+	GetByID(channelID uuid.UUID) (*model.CanalServidor, error)
 }

@@ -20,5 +20,5 @@ type ReplicaManager interface {
 	ReplicaFile(file *model.ArchivoMetadata) error
 	
 	// ListPendingEvents lista los eventos de replicación pendientes para un nodo específico
-	ListPendingEvents(peerID uuid.UUID) ([]ReplicaEventDTO, error)
+	ListPendingEvents(peerID uuid.UUID) ([]*model.ReplicaEvent, error)
 }
