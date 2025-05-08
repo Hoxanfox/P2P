@@ -1,0 +1,16 @@
+# Configuración del pool de sockets
+socket_pool:
+  # Número máximo de conexiones simultáneas permitidas
+  max_connections: 1000
+  
+  # Tiempo máximo de inactividad antes de considerar una conexión como zombie (en segundos)
+  inactive_timeout: 300
+  
+  # Intervalo de tiempo para realizar health checks (en segundos)
+  health_check_interval: 60
+  
+  # Tamaño del buffer para operaciones de lectura/escritura (en bytes)
+  buffer_size: 4096
+  
+  # Tiempo máximo para completar operaciones de escritura (en milisegundos)
+  write_timeout: 5000

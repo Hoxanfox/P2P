@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"model"
 )
 
 // HeartbeatService define las operaciones para envío y recepción de heartbeats entre nodos P2P
@@ -21,5 +22,5 @@ type HeartbeatService interface {
 	) error
 
 	// ListLogs lista los logs de heartbeat para un nodo específico
-	ListLogs(peerID uuid.UUID) ([]HeartbeatLogDTO, error)
+	ListLogs(peerID uuid.UUID) ([]*model.HeartbeatLog, error)
 }

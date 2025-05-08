@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/google/uuid"
+	"model"
 )
 
 // PresenceService define las operaciones para gestionar la presencia de usuarios en tiempo real
@@ -13,5 +14,5 @@ type PresenceService interface {
 	MarkDisconnected(userID uuid.UUID) error
 	
 	// ListConnected lista todos los usuarios conectados actualmente
-	ListConnected() ([]UsuarioDTO, error)
+	ListConnected() ([]*model.UsuarioServidor, error)
 }

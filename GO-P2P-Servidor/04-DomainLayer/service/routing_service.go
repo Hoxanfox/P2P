@@ -12,5 +12,5 @@ type RoutingService interface {
 	RouteMessage(message *model.MensajeServidor) error
 	
 	// ListRoutes lista las rutas para un mensaje específico
-	ListRoutes(messageID uuid.UUID) ([]RoutedMessageDTO, error)
+	ListRoutes(messageID uuid.UUID) ([]*model.RoutedMessage, error)
 }

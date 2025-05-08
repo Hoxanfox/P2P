@@ -1,0 +1,30 @@
+# Configuración del pool de conexiones entre pares P2P
+peer_pool:
+  # Configuración de conexiones
+  max_peers: 100
+  dial_timeout: 10s  # Tiempo máximo para establecer conexión
+  handshake_timeout: 5s
+  
+  # Estrategia de reconexión
+  reconnect:
+    base_delay: 1s        # Retraso inicial antes de reintentar
+    max_delay: 60s        # Retraso máximo entre reintentos
+    max_attempts: 10      # Número máximo de intentos de reconexión
+    jitter_factor: 0.2    # Factor de aleatoriedad para evitar tormentas de conexión
+  
+  # Configuración TLS
+  tls:
+    cert_file: "cert/node-cert.pem"
+    key_file: "cert/node-key.pem"
+    ca_file: "cert/ca-cert.pem"    # Certificado de la CA utilizada para la validación
+    server_name: "p2p-node"        # Nombre utilizado en la verificación de certificados
+  
+  # Tamaños de buffer y frame
+  buffer_size: 8192
+  max_frame_size: 1048576  # 1MB máximo por frame
+  
+  # Configuración de keepalive para detectar desconexiones
+  keepalive:
+    interval: 30s
+    timeout: 10s
+    max_missed: 3  # Número de mensajes fallidos antes de considerar desconectado
