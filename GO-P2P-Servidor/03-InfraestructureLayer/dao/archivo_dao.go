@@ -1,29 +1,32 @@
-package Dao
+package dao
 
 import (
 	"database/sql"
 	"time"
 
-	"../04-DomainLayer/model"
 	"github.com/google/uuid"
+	"model"
+	"pool"
 )
 
-type ArchivoMySQLDAO struct {
-	db *sql.DB
+// ArchivoDAO maneja las operaciones de base de datos para archivos
+type ArchivoDAO struct {
+	dbPool *pool.DBConnectionPool
 }
 
-func NewArchivoMySQLDAO(db *sql.DB) *ArchivoMySQLDAO {
-	return &ArchivoMySQLDAO{
-		db: db,
+// NuevoArchivoDAO crea una nueva instancia de ArchivoDAO
+func NuevoArchivoDAO(dbPool *pool.DBConnectionPool) *ArchivoDAO {
+	return &ArchivoDAO{
+		dbPool: dbPool,
 	}
 }
 
-// Create inserta un nuevo archivo en la base de datos
-func (dao *ArchivoMySQLDAO) Create(archivo *model.ArchivoMetadata) error {
+// Crear inserta un nuevo archivo en la base de datos
+func (dao *ArchivoDAO) Crear(archivo *model.ArchivoMetadata) error {
 	query := `INSERT INTO archivos (id, nombre_original, tamano_bytes, ruta, subido_por, fecha_subida) 
               VALUES (?, ?, ?, ?, ?, ?)`
 
-	_, err := dao.db.Exec(
+	_, err := dao.dbPool.DB().Exec(
 		query,
 		archivo.ID().String(),
 		archivo.NombreOriginal(),
@@ -37,7 +40,7 @@ func (dao *ArchivoMySQLDAO) Create(archivo *model.ArchivoMetadata) error {
 }
 
 // GetByID busca un archivo por su ID
-func (dao *ArchivoMySQLDAO) GetByID(id uuid.UUID) (*model.ArchivoMetadata, error) {
+func (dao *ArchivoDAO) GetByID(id uuid.UUID) (*model.ArchivoMetadata, error) {
 	query := `SELECT id, nombre_original, tamano_bytes, ruta, subido_por, fecha_subida 
               FROM archivos 
               WHERE id = ?`
@@ -47,7 +50,7 @@ func (dao *ArchivoMySQLDAO) GetByID(id uuid.UUID) (*model.ArchivoMetadata, error
 	var tamanoBytes int64
 	var fechaSubida time.Time
 
-	err := dao.db.QueryRow(query, id.String()).Scan(
+	err := dao.dbPool.DB().QueryRow(query, id.String()).Scan(
 		&idStr,
 		&nombreOriginal,
 		&tamanoBytes,
@@ -84,12 +87,12 @@ func (dao *ArchivoMySQLDAO) GetByID(id uuid.UUID) (*model.ArchivoMetadata, error
 }
 
 // Update actualiza un archivo existente en la base de datos
-func (dao *ArchivoMySQLDAO) Update(archivo *model.ArchivoMetadata) error {
+func (dao *ArchivoDAO) Update(archivo *model.ArchivoMetadata) error {
 	query := `UPDATE archivos 
               SET nombre_original = ?, tamano_bytes = ?, ruta = ?, subido_por = ?, fecha_subida = ? 
               WHERE id = ?`
 
-	_, err := dao.db.Exec(
+	_, err := dao.dbPool.DB().Exec(
 		query,
 		archivo.NombreOriginal(),
 		archivo.TamanoBytes(),
@@ -103,20 +106,20 @@ func (dao *ArchivoMySQLDAO) Update(archivo *model.ArchivoMetadata) error {
 }
 
 // Delete elimina un archivo por su ID
-func (dao *ArchivoMySQLDAO) Delete(id uuid.UUID) error {
+func (dao *ArchivoDAO) Delete(id uuid.UUID) error {
 	query := `DELETE FROM archivos WHERE id = ?`
 
-	_, err := dao.db.Exec(query, id.String())
+	_, err := dao.dbPool.DB().Exec(query, id.String())
 	return err
 }
 
 // GetByUploader obtiene archivos subidos por un usuario específico
-func (dao *ArchivoMySQLDAO) GetByUploader(uploaderID uuid.UUID) ([]*model.ArchivoMetadata, error) {
+func (dao *ArchivoDAO) GetByUploader(uploaderID uuid.UUID) ([]*model.ArchivoMetadata, error) {
 	query := `SELECT id, nombre_original, tamano_bytes, ruta, subido_por, fecha_subida 
               FROM archivos 
               WHERE subido_por = ?`
 
-	rows, err := dao.db.Query(query, uploaderID.String())
+	rows, err := dao.dbPool.DB().Query(query, uploaderID.String())
 	if err != nil {
 		return nil, err
 	}

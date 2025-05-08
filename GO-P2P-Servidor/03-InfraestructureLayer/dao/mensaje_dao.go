@@ -1,30 +1,31 @@
-package Dao
+package dao
 
 import (
 	"database/sql"
 	"time"
 
-	"github.com/P2P/GO-P2P-SERVIDOR/04-DomainLayer/model"
 	"github.com/google/uuid"
+	"model"
+	"pool"
 )
 
-// MessageMySQLDAO maneja las operaciones de base de datos para entidades MensajeServidor
-type MessageMySQLDAO struct {
-	db *sql.DB
+// MensajeDAO maneja las operaciones de base de datos para entidades MensajeServidor
+type MensajeDAO struct {
+	dbPool *pool.DBConnectionPool
 }
 
-// NewMessageMySQLDAO crea una nueva instancia de MessageMySQLDAO
-func NewMessageMySQLDAO(db *sql.DB) *MessageMySQLDAO {
-	return &MessageMySQLDAO{db: db}
+// NuevoMensajeDAO crea una nueva instancia de MensajeDAO
+func NuevoMensajeDAO(dbPool *pool.DBConnectionPool) *MensajeDAO {
+	return &MensajeDAO{dbPool: dbPool}
 }
 
-// Create persiste un nuevo mensaje en la base de datos
-func (dao *MessageMySQLDAO) Create(mensaje *model.MensajeServidor) error {
+// Crear persiste un nuevo mensaje en la base de datos
+func (dao *MensajeDAO) Crear(mensaje *model.MensajeServidor) error {
 	query := `INSERT INTO mensajes (id, remitente_id, destino_usuario_id, canal_id, 
               chat_privado_id, contenido, timestamp, archivo_id)
               VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
 
-	_, err := dao.db.Exec(
+	_, err := dao.dbPool.DB().Exec(
 		query,
 		mensaje.ID().String(),
 		mensaje.RemitenteID().String(),
@@ -39,50 +40,50 @@ func (dao *MessageMySQLDAO) Create(mensaje *model.MensajeServidor) error {
 	return err
 }
 
-// FindByID recupera un mensaje por su ID
-func (dao *MessageMySQLDAO) FindByID(id uuid.UUID) (*model.MensajeServidor, error) {
+// BuscarPorID recupera un mensaje por su ID
+func (dao *MensajeDAO) BuscarPorID(id uuid.UUID) (*model.MensajeServidor, error) {
 	query := `SELECT id, remitente_id, destino_usuario_id, canal_id, 
               chat_privado_id, contenido, timestamp, archivo_id 
               FROM mensajes WHERE id = ?`
 
-	row := dao.db.QueryRow(query, id.String())
-	return dao.scanMessage(row)
+	row := dao.dbPool.DB().QueryRow(query, id.String())
+	return dao.escanearMensaje(row)
 }
 
-// FindByChannelID recupera mensajes de un canal específico
-func (dao *MessageMySQLDAO) FindByChannelID(canalID uuid.UUID, limit int) ([]*model.MensajeServidor, error) {
+// BuscarPorCanalID recupera mensajes de un canal específico
+func (dao *MensajeDAO) BuscarPorCanalID(canalID uuid.UUID, limite int) ([]*model.MensajeServidor, error) {
 	query := `SELECT id, remitente_id, destino_usuario_id, canal_id, 
               chat_privado_id, contenido, timestamp, archivo_id 
               FROM mensajes WHERE canal_id = ? 
               ORDER BY timestamp DESC LIMIT ?`
 
-	rows, err := dao.db.Query(query, canalID.String(), limit)
+	rows, err := dao.dbPool.DB().Query(query, canalID.String(), limite)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	return dao.scanMessageRows(rows)
+	return dao.escanearFilasMensajes(rows)
 }
 
-// FindByChatPrivadoID recupera mensajes de un chat privado
-func (dao *MessageMySQLDAO) FindByChatPrivadoID(chatPrivadoID uuid.UUID, limit int) ([]*model.MensajeServidor, error) {
+// BuscarPorChatPrivadoID recupera mensajes de un chat privado
+func (dao *MensajeDAO) BuscarPorChatPrivadoID(chatPrivadoID uuid.UUID, limite int) ([]*model.MensajeServidor, error) {
 	query := `SELECT id, remitente_id, destino_usuario_id, canal_id, 
               chat_privado_id, contenido, timestamp, archivo_id 
               FROM mensajes WHERE chat_privado_id = ? 
               ORDER BY timestamp DESC LIMIT ?`
 
-	rows, err := dao.db.Query(query, chatPrivadoID.String(), limit)
+	rows, err := dao.dbPool.DB().Query(query, chatPrivadoID.String(), limite)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	return dao.scanMessageRows(rows)
+	return dao.escanearFilasMensajes(rows)
 }
 
-// FindDirectMessages recupera mensajes directos entre dos usuarios
-func (dao *MessageMySQLDAO) FindDirectMessages(senderID, recipientID uuid.UUID, limit int) ([]*model.MensajeServidor, error) {
+// BuscarMensajesDirectos recupera mensajes directos entre dos usuarios
+func (dao *MensajeDAO) BuscarMensajesDirectos(remitenteID, destinatarioID uuid.UUID, limite int) ([]*model.MensajeServidor, error) {
 	query := `SELECT id, remitente_id, destino_usuario_id, canal_id, 
               chat_privado_id, contenido, timestamp, archivo_id 
               FROM mensajes 
@@ -90,27 +91,27 @@ func (dao *MessageMySQLDAO) FindDirectMessages(senderID, recipientID uuid.UUID, 
               OR (remitente_id = ? AND destino_usuario_id = ?) 
               ORDER BY timestamp DESC LIMIT ?`
 
-	rows, err := dao.db.Query(query,
-		senderID.String(), recipientID.String(),
-		recipientID.String(), senderID.String(),
-		limit)
+	rows, err := dao.dbPool.DB().Query(query,
+		remitenteID.String(), destinatarioID.String(),
+		destinatarioID.String(), remitenteID.String(),
+		limite)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	return dao.scanMessageRows(rows)
+	return dao.escanearFilasMensajes(rows)
 }
 
-// Delete elimina un mensaje de la base de datos
-func (dao *MessageMySQLDAO) Delete(id uuid.UUID) error {
+// Eliminar elimina un mensaje de la base de datos
+func (dao *MensajeDAO) Eliminar(id uuid.UUID) error {
 	query := `DELETE FROM mensajes WHERE id = ?`
-	_, err := dao.db.Exec(query, id.String())
+	_, err := dao.dbPool.DB().Exec(query, id.String())
 	return err
 }
 
-// Helper para escanear una fila en un mensaje
-func (dao *MessageMySQLDAO) scanMessage(row *sql.Row) (*model.MensajeServidor, error) {
+// escanearMensaje es un método auxiliar para escanear una fila en un mensaje
+func (dao *MensajeDAO) escanearMensaje(row *sql.Row) (*model.MensajeServidor, error) {
 	var (
 		idStr, remitenteIDStr                                           string
 		destinoUsuarioIDStr, canalIDStr, chatPrivadoIDStr, archivoIDStr sql.NullString
@@ -134,14 +135,14 @@ func (dao *MessageMySQLDAO) scanMessage(row *sql.Row) (*model.MensajeServidor, e
 		return nil, err
 	}
 
-	return dao.buildMessageFromScannedData(
+	return dao.construirMensajeDesdeValoresEscaneados(
 		idStr, remitenteIDStr, destinoUsuarioIDStr,
 		canalIDStr, chatPrivadoIDStr, contenido,
 		timestamp, archivoIDStr)
 }
 
-// Helper para escanear filas en mensajes
-func (dao *MessageMySQLDAO) scanMessageRow(rows *sql.Rows) (*model.MensajeServidor, error) {
+// escanearFilaMensaje es un método auxiliar para escanear una fila de mensajes
+func (dao *MensajeDAO) escanearFilaMensaje(rows *sql.Rows) (*model.MensajeServidor, error) {
 	var (
 		idStr, remitenteIDStr                                           string
 		destinoUsuarioIDStr, canalIDStr, chatPrivadoIDStr, archivoIDStr sql.NullString
@@ -162,17 +163,17 @@ func (dao *MessageMySQLDAO) scanMessageRow(rows *sql.Rows) (*model.MensajeServid
 		return nil, err
 	}
 
-	return dao.buildMessageFromScannedData(
+	return dao.construirMensajeDesdeValoresEscaneados(
 		idStr, remitenteIDStr, destinoUsuarioIDStr,
 		canalIDStr, chatPrivadoIDStr, contenido,
 		timestamp, archivoIDStr)
 }
 
-// Helper para escanear múltiples filas
-func (dao *MessageMySQLDAO) scanMessageRows(rows *sql.Rows) ([]*model.MensajeServidor, error) {
+// escanearFilasMensajes es un método auxiliar para escanear múltiples filas
+func (dao *MensajeDAO) escanearFilasMensajes(rows *sql.Rows) ([]*model.MensajeServidor, error) {
 	var mensajes []*model.MensajeServidor
 	for rows.Next() {
-		mensaje, err := dao.scanMessageRow(rows)
+		mensaje, err := dao.escanearFilaMensaje(rows)
 		if err != nil {
 			return nil, err
 		}
@@ -186,8 +187,8 @@ func (dao *MessageMySQLDAO) scanMessageRows(rows *sql.Rows) ([]*model.MensajeSer
 	return mensajes, nil
 }
 
-// Helper para convertir valores escaneados en un objeto MensajeServidor
-func (dao *MessageMySQLDAO) buildMessageFromScannedData(
+// construirMensajeDesdeValoresEscaneados es un método auxiliar para convertir valores escaneados en un objeto MensajeServidor
+func (dao *MensajeDAO) construirMensajeDesdeValoresEscaneados(
 	idStr, remitenteIDStr string,
 	destinoUsuarioIDStr, canalIDStr, chatPrivadoIDStr sql.NullString,
 	contenido string,
