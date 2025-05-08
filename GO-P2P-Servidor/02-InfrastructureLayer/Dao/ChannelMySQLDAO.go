@@ -1,4 +1,6 @@
 package Dao
+<<<<<<< HEAD
+=======
 
 import (
 	"database/sql"
@@ -146,3 +148,4 @@ func (dao *ChannelMySQLDAO) scanChannelRow(rows *sql.Rows) (*model.CanalServidor
 
 	return model.NewCanalServidor(parsedID, nombre, descripcion, tipo)
 }
+>>>>>>> main
