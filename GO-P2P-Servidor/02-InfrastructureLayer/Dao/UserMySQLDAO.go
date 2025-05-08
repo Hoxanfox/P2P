@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/P2P/GO-P2P-SERVIDOR/04-DomainLayer/model"
+	"model"
 )
 
 // UserMySQLDAO handles database operations for UsuarioServidor entities
